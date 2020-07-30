@@ -1,0 +1,24 @@
+# super2:
+#   description: 'superposition'
+#   organization: 'gebner'
+#   maintainers:
+#     - gebner
+
+# mathematica:
+#   description: 'A link between Lean and Mathematica'
+#   organization: 'robertylewis'
+#   maintainers:
+#     - robertylewis
+#     - minchaowu
+
+test-repo-1:
+  description: ''
+  organization: 'leanprover-contrib'
+  maintainers:
+    - robertylewis
+
+test-repo-2:
+  description: ''
+  organization: 'leanprover-contrib'
+  maintainers:
+    - robertylewis
