@@ -29,5 +29,9 @@ It is still in a design phase. What I envision is this:
 * The logic to test new Lean versions isn't there yet.
 * Put things into CI, including failure/upgrade notifications (as issues or PRs to the project repo?)
 * Right now projects are assumed to be forked to the `leanprover-contrib` org, change this.
+* We should track the head SHA of each branch. 
+  If no SHAs change for a particlar Lean version, there's no need to rerun tests on that version.
+  This is very likely for old versions of Lean.
+  Unfortunately this means we have to store state between runs.
 * Use `mathlibtools` as a Python project instead of `leanproject` CLI?
 * We can list checked in projects on the community website. (Sorted by # of GH stars as popularity maybe?)
