@@ -35,3 +35,6 @@ It is still in a design phase. What I envision is this:
   Unfortunately this means we have to store state between runs.
 * Use `mathlibtools` as a Python project instead of `leanproject` CLI?
 * We can list checked in projects on the community website. (Sorted by # of GH stars as popularity maybe?)
+* It's essential that projects keep the latest `lean-3.*.*` branch updated
+  instead of working only on `master`. 
+  We should provide a GH Action that mirrors `master` to the right branch.
