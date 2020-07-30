@@ -22,3 +22,12 @@ It is still in a design phase. What I envision is this:
 * We also want to notice when new Lean versions are released,
   check if projects can be updated without changes,
   and suggest to project owners that they create a new `lean-3.*.*` branch.
+
+
+## TODO
+
+* The logic to test new Lean versions isn't there yet.
+* Put things into CI, including failure/upgrade notifications (as issues or PRs to the project repo?)
+* Right now projects are assumed to be forked to the `leanprover-contrib` org, change this.
+* Use `mathlibtools` as a Python project instead of `leanproject` CLI?
+* We can list checked in projects on the community website. (Sorted by # of GH stars as popularity maybe?)
