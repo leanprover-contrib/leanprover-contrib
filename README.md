@@ -2,6 +2,11 @@
 
 This repo creates some basic checkin/CI for Lean projects that are not part of mathlib.
 
+Current usage:
+```
+python3 test_builds.py <leanprover-community-bot GitHub password>
+```
+
 It is still in a design phase. What I envision is this:
 
 * The maintainer of an external project adds their package info to [projects.yml](blob/master/projects/projects.yml).
@@ -28,12 +33,12 @@ It is still in a design phase. What I envision is this:
 
 * The logic to test new Lean versions isn't there yet.
 * Put things into CI, including failure/upgrade notifications (as issues or PRs to the project repo?)
-* We should track the head SHA of each branch. 
+* We should track the head SHA of each branch.
   If no SHAs change for a particlar Lean version, there's no need to rerun tests on that version.
   This is very likely for old versions of Lean.
   Unfortunately this means we have to store state between runs.
 * Use `mathlibtools` as a Python project instead of `leanproject` CLI?
 * We can list checked in projects on the community website. (Sorted by # of GH stars as popularity maybe?)
 * It's essential that projects keep the latest `lean-3.*.*` branch updated
-  instead of working only on `master`. 
+  instead of working only on `master`.
   We should provide a GH Action that mirrors `master` to the right branch.

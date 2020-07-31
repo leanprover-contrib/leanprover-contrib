@@ -6,6 +6,7 @@ import yaml
 import git
 import toml
 import subprocess
+import github_reports
 
 @dataclass
 class Project:
@@ -13,6 +14,8 @@ class Project:
     branches: List[List[int]]
     repo: git.Repo
     dependencies: Set[str]
+    organization: str
+    owners: List[str]
 
 @dataclass
 class Failure:
@@ -34,6 +37,41 @@ class BuildFailure(Failure):
             s += f'\n  This may be because of a transitive failure in {self.find_trans_fail().project}'
         return s
 
+    def report_issue(self, version_history, mathlib_prev = None):
+        if self.is_new:
+            version_key = remote_ref_from_lean_version(self.version)
+            ppversion = '.'.join(str(s) for s in self.version)
+            project = projects[self.project]
+            branch_url = f'https://github.com/{project.organization}/{self.project}/tree/lean-{ppversion}'
+            mathlib_curr = version_history[version_key]['mathlib']['latest_test']
+            # if mathlib_prev is not None and mathlib_prev != :
+            git_diff_url = f'https://github.com/leanprover-community/mathlib/compare/{mathlib_prev}...{mathlib_curr}' \
+                if mathlib_prev is not None and mathlib_prev != mathlib_curr \
+                else None
+
+            s = \
+f"""This is an automated message from the [leanprover-contrib](https://github.com/leanprover-contrib/leanprover-contrib) repository.
+
+Your project's [lean-{ppversion}]({branch_url}) branch has failed to build with recent updates to mathlib and/or its other dependencies."""
+
+            if git_diff_url is not None:
+                s += f'\n\nThis is often due to changes in mathlib, but could also happen due to changes in other dependencies or your own changes to your branch. '
+                s += f'If it is due to mathlib, the conflicting changes occur in [this range]({git_diff_url}).'
+
+            s += f'\n\nThe failure occurred using Lean version {ppversion}.'
+            if self.traceback is not None:
+                s += f'\n\nThis failure may have been caused by a failure in the {self.find_trans_fail().project} on which your project depends.'
+            issue = github_reports.open_issue_on_failure(
+                f'{project.organization}/{self.project}',
+                f'Build failure on automatic dependency update on `lean-{ppversion}`',
+                s,
+                project.owners)
+            version_history[version_key][self.project]['issue'] = issue
+
+def format_project_link(project_name):
+    org = projects[project_name].organization
+    return f'[{project_name}](https://github.com/{org}/{project_name})'
+
 class DependencyFailure(Failure):
     def __init__(self, project, version, is_new, dependencies):
         self.dependencies = dependencies
@@ -41,6 +79,24 @@ class DependencyFailure(Failure):
 
     def __repr__(self):
         return f'{self.project} was not built on version {self.version} because some of its dependencies do not have a corresponding version: {self.dependencies}'
+
+    def report_issue(self, version_history, mathlib_prev = None):
+        if self.is_new:
+            ppversion = '.'.join(str(s) for s in self.version)
+            deplist = '\n'.join('* {format_project_link(d)}' for d in self.dependencies)
+            s = \
+f"""This is an automated message from the [leanprover-contrib](https://github.com/leanprover-contrib/leanprover-contrib) repository.
+
+Your project has a `lean-{ppversion}` branch, but some of its dependencies do not:
+{deplist}"""
+            project = projects[self.project]
+            issue = github_reports.open_issue_on_failure(
+                f'{project.organization}/{self.project}',
+                f'Dependency error on `lean-{ppversion}`',
+                s,
+                project.owners)
+            version_history[remote_ref_from_lean_version(self.version)][self.project]['issue'] = issue
+
 
 root = Path('.').absolute()
 
@@ -95,7 +151,8 @@ def populate_projects():
         with open(root / project_name / 'leanpkg.toml', 'r') as lean_toml:
             parsed_toml = toml.loads(lean_toml.read())
         deps = set(d for d in parsed_toml['dependencies'])
-        projects[project_name] = Project(project_name, versions, repo, deps)
+        owners = projects_data[project_name]['maintainers']
+        projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners)
         print(f'{project_name} has dependencies: {deps}')
 
 
@@ -125,6 +182,8 @@ def add_success_to_version_history(version, project_name, version_history):
     if key not in version_history:
         version_history[key] = {project_name:{'latest_success':sha, 'latest_test':sha, 'success':True}}
     else:
+        if project_name in version_history[key] and 'issue' in version_history[key][project_name]:
+            github_reports.resolve_issue(f'{projects[project_name].organization}/{project_name}', version_history[key][project_name]['issue'])
         version_history[key][project_name] = {'latest_success':sha, 'latest_test':sha, 'success':True}
 
 def add_failure_to_version_history(version, project_name, version_history):
@@ -143,9 +202,10 @@ def failing_test(version, project_name, version_history, failures, new_failure):
     add_failure_to_version_history(version, project_name, version_history)
 
 def previous_run_exists_and_failed(version, project_name, version_history):
-    return remote_ref_from_lean_version(version) in version_history \
-      and project_name in version_history[version] \
-      and not version_history[version][project_name]['success']
+    key = remote_ref_from_lean_version(version)
+    return key in version_history \
+      and project_name in version_history[key] \
+      and not version_history[key][project_name]['success']
 
 
 def test_project_on_version(version, project_name, failures, version_history):
@@ -184,6 +244,8 @@ def changes_on_version(version, project_names, version_history):
 
 def test_on_lean_version(version, version_history):
     print(f'\nRunning tests on Lean version {version}')
+    key = remote_ref_from_lean_version(version)
+    mathlib_prev = version_history[key]['mathlib']['latest_test'] if 'mathlib' in version_history[key] else None
     add_success_to_version_history(version, 'mathlib', version_history)
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
@@ -220,6 +282,7 @@ def test_on_lean_version(version, version_history):
         print(f'\n{len(failures)} failures:')
     for f in failures:
         print(failures[f])
+        failures[f].report_issue(version_history, mathlib_prev)
 
 populate_projects()
 

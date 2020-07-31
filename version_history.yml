@@ -17,6 +17,7 @@ lean-3.17.0:
     latest_test: 27f622eff9ab56d2fe7f8f619dc5f6b4caf1c31e
     success: true
   test-repo-2:
+    issue: 3
     latest_test: 082eb29d90021a1cf4d35e568db7e5ee63fdecb5
     success: false
 lean-3.17.1:
@@ -25,6 +26,7 @@ lean-3.17.1:
     latest_test: f78a012d976ebf3f2a4694fa16cff1632ce0b57f
     success: true
   test-repo-1:
-    latest_success: 0bd656880f095bf84badbfa5a05b4ae29d90496f
-    latest_test: 0bd656880f095bf84badbfa5a05b4ae29d90496f
-    success: true
+    issue: 6
+    latest_success: 1f89310046c0569c7cb4dbe81247c2e2a24eefa8
+    latest_test: be6c4ff472239e4a7ac1085bbf88f38978c85490
+    success: false
