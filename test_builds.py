@@ -29,10 +29,18 @@ class BuildFailure:
             s += f'\n  This may be because of a transitive failure in {self.find_trans_fail().project}'
         return s
 
+class DependencyFailure:
+    def __init__(self, project, dependencies, version):
+        self.project = project 
+        self.dependencies = dependencies
+        self.version = version 
+
+    def __repr__(self):
+        return f'{self.project} was not built on version {self.version} because some of its dependencies do not have a corresponding version: {self.dependencies}'
 
 root = Path('.').absolute()
 
-contrib_org = 'git@github.com:leanprover-contrib/'
+git_prefix = 'git@github.com'
 
 projects = {}
 
@@ -58,7 +66,8 @@ def populate_projects():
 
     print()
     for project_name in projects_data:
-        repo = git.Repo.clone_from(contrib_org + project_name, root / project_name)
+        project_org = projects_data[project_name]['organization']
+        repo = git.Repo.clone_from(f'{git_prefix}:{project_org}/{project_name}', root / project_name)
         versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in repo.remotes[0].refs] if vs is not None]
         print(f'{project_name} has {len(versions)} version branches:')
         print(versions)
@@ -95,6 +104,7 @@ def test_project_on_version(project_name, version, failures):
         failures[project_name] = BuildFailure(project_name, version, failure)
         return
     repo = project.repo
+    repo.head.reset(index=True, working_tree=True)
     checkout_version(repo, version)
     # we are now operating on a detached head 'origin/lean-*.*.*' branch
 
@@ -106,23 +116,42 @@ def test_project_on_version(project_name, version, failures):
 
 
 def test_on_lean_version(version):
+    print(f'\nRunning tests on Lean version {version}')
     version_projects = [p for p in projects if version in projects[p].branches]
+    print(f'version projects: {version_projects}')
+    print(f'test_repo_2 branches ' + str(projects['test-repo-2'].branches))
     ordered_projects = toposort_flatten({p:projects[p].dependencies for p in version_projects})
-    print(f'building projects in order: {ordered_projects}')
-    ordered_projects.remove('mathlib')
-    update_mathlib_to_version(version)
+    if 'mathlib' in ordered_projects:
+        ordered_projects.remove('mathlib')
+
     failures = {}
+    i = 0
+    while i < len(ordered_projects):
+        p = ordered_projects[i]
+        missing_deps = [dep for dep in projects[p].dependencies if dep not in ordered_projects and dep != 'mathlib']
+        if p not in version_projects or len(missing_deps) > 0:
+            print(f'removing {p}')
+            del ordered_projects[i]
+            if len(missing_deps) > 0:
+                failures[p] = DependencyFailure(p, missing_deps, version)
+        else:
+            i += 1
+
+    print(f'\nbuilding projects in order: {ordered_projects}')
+    update_mathlib_to_version(version)
     for project_name in ordered_projects:
         test_project_on_version(project_name, version, failures)
 
     if len(failures) > 0:
-        print('Failures:')
+        print(f'\n{len(failures)} failures:')
     for f in failures:
         print(failures[f])
 
 populate_projects()
 
 test_on_lean_version([3,16,3])
+test_on_lean_version([3,17,0])
+test_on_lean_version([3,17,1])
 
 # print(toposort_flatten({p : projects[p].dependencies for p in projects}))
 
