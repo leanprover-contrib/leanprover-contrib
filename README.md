@@ -2,12 +2,16 @@
 
 This repo creates some basic checkin/CI for Lean projects that are not part of mathlib.
 
-Current usage:
+Current local usage:
 ```
-python3 test_builds.py <leanprover-community-bot GitHub password>
+python3 test_builds.py <leanprover-community-bot GitHub PAT>
 ```
 
-It is still in a design phase. What I envision is this:
+But it's intended to run as a script in this repository.
+
+The project is still in a design phase.
+
+## How it works
 
 * The maintainer of an external project adds their package info to [projects.yml](blob/master/projects/projects.yml).
   This project should have some number of `lean-3.*.*` branches.
@@ -24,21 +28,41 @@ It is still in a design phase. What I envision is this:
 * If a project fails, we notify the project owners.
   This failure may be caused by changes in a dependency (probably mathlib) or a downstream failure.
 
-* We also want to notice when new Lean versions are released,
-  check if projects can be updated without changes,
-  and suggest to project owners that they create a new `lean-3.*.*` branch.
+
+## What to do as a project owner
+
+This is still under development, but you can help if you have a Lean project that you want regularly tested.
+
+You should ensure a few things:
+
+* Your project needs to have `lean-3.*.*` branches corresponding to releases of Lean.
+  If you don't have these branches, nothing will be checked: we do not check `master`.
+* There are restrictions on the `leanpkg.toml` file in each `lean-3.*.*` branch:
+  - The `lean_version` field must match the version in the branch name.
+  - The `name` field must be the same as your project's GitHub repository.
+    (E.g. [`lean-perfectoid-spaces`](https://github.com/leanprover-community/lean-perfectoid-spaces/blob/master/leanpkg.toml))
+* Your project should not change dependencies between versions:
+  every `leanpkg.toml` should have the same list of dependency names.
+  (It's okay if the `rev` fields are different.)
+* All of these dependencies should also meet these criteria and be checked into this repo.
+
+Hopefully these restrictions will be loosened as development goes on.
+
+If you meet these criteria, you can sign up by making a pull request to
+[`projects.yml`](https://github.com/leanprover-contrib/leanprover-contrib/blob/master/projects/projects.yml).
+
+Note that if you sign up now, you may get some spam in the form of GitHub issues and notifications.
+This is the price of being an early adopter.
 
 
 ## TODO
 
-* The logic to test new Lean versions isn't there yet.
-* Put things into CI, including failure/upgrade notifications (as issues or PRs to the project repo?)
-* We should track the head SHA of each branch.
-  If no SHAs change for a particlar Lean version, there's no need to rerun tests on that version.
-  This is very likely for old versions of Lean.
-  Unfortunately this means we have to store state between runs.
 * Use `mathlibtools` as a Python project instead of `leanproject` CLI?
 * We can list checked in projects on the community website. (Sorted by # of GH stars as popularity maybe?)
 * It's essential that projects keep the latest `lean-3.*.*` branch updated
   instead of working only on `master`.
   We should provide a GH Action that mirrors `master` to the right branch.
+* We may want to notice when new Lean versions are released,
+  check if projects can be updated without changes,
+  and suggest to project owners that they create a new `lean-3.*.*` branch.
+  But this should probably be part of local Actions scripts instead.
