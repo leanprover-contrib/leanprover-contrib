@@ -3,9 +3,10 @@ from dataclasses import dataclass, field
 from typing import List, Set, Mapping, Optional
 from toposort import toposort_flatten
 import yaml
-import git 
+import git
 import toml
 import subprocess
+import json
 
 @dataclass
 class Project:
@@ -16,8 +17,8 @@ class Project:
 
 class BuildFailure:
     def __init__(self, project, version, traceback=None):
-        self.project = project 
-        self.version = version 
+        self.project = project
+        self.version = version
         self.traceback = traceback
 
     def find_trans_fail(self):
@@ -31,9 +32,9 @@ class BuildFailure:
 
 class DependencyFailure:
     def __init__(self, project, dependencies, version):
-        self.project = project 
+        self.project = project
         self.dependencies = dependencies
-        self.version = version 
+        self.version = version
 
     def __repr__(self):
         return f'{self.project} was not built on version {self.version} because some of its dependencies do not have a corresponding version: {self.dependencies}'
@@ -46,7 +47,12 @@ projects = {}
 
 print('cloning mathlib')
 mathlib_repo = git.Repo.clone_from('git@github.com:leanprover-community/mathlib', root / 'mathlib')
-    
+
+def get_project_repo(project_name):
+    if project_name == 'mathlib':
+        return mathlib_repo
+    else:
+        return projects[project_name].repo
 
 def lean_version_from_remote_ref(ref):
     if not ref.startswith('origin/lean-'):
@@ -55,6 +61,15 @@ def lean_version_from_remote_ref(ref):
 
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
+
+# returns a dict loaded from json
+def load_version_history():
+    with open(root / 'version_history.json', 'r') as json_file:
+        return json.load(json_file)
+
+def write_version_history(hist):
+    with open(root / 'version_history.json', 'w') as json_file:
+        json.dump(hist, json_file)
 
 def populate_projects():
     with open(root/'projects'/'projects.yml', 'r') as project_file:
@@ -95,7 +110,33 @@ def leanpkg_build(project_name):
     p.communicate()
     return p.returncode == 0
 
-def test_project_on_version(project_name, version, failures):
+def get_git_sha(version, project_name):
+    key = remote_ref_from_lean_version(version)
+    return get_project_repo(project_name).remotes[0].refs.__getattr__(key).object.hexsha
+
+def add_success_to_version_history(version, project_name, version_history):
+    key = remote_ref_from_lean_version(version)
+    sha = get_git_sha(version, project_name)
+    if key not in version_history:
+        version_history[key] = {project_name:{'latest_success':sha, 'latest_test':sha}}
+    else:
+        version_history[key][project_name] = {'latest_success':sha, 'latest_test':sha}
+
+def add_failure_to_version_history(version, project_name, version_history):
+    key = remote_ref_from_lean_version(version)
+    sha = get_git_sha(version, project_name)
+    if key not in version_history:
+        version_history[key] = {project_name:{'latest_test':sha}}
+    elif project_name in version_history[key]:
+        version_history[key][project_name]['latest_test'] = sha
+    else:
+        version_history[key][project_name] = {'latest_test':sha}
+
+def failing_test(version, project_name, version_history, failures, new_failure):
+    failures[project_name] = new_failure
+    add_failure_to_version_history(version, project_name, version_history)
+
+def test_project_on_version(version, project_name, failures, version_history):
     print(f'testing {project_name} on version {version}')
     project = projects[project_name]
 
@@ -111,15 +152,31 @@ def test_project_on_version(project_name, version, failures):
     for dep in project.dependencies:
         leanpkg_add_local_dependency(project_name, dep)
 
-    if not leanpkg_build(project_name):
-        failures[project_name] = BuildFailure(project_name, version, None)
+    if leanpkg_build(project_name):
+        add_success_to_version_history(version, project_name, version_history)
+    else:
+        failing_test(version, project_name, version_history, failures, BuildFailure(project_name, version, None))
 
+def project_has_changes_on_version(version, project_name, version_history):
+    key = remote_ref_from_lean_version(version)
+    if key not in version_history or project_name not in version_history[key]:
+        return True
+    latest_test = version_history[key][project_name]['latest_test']
+    curr_sha = get_git_sha(version, project_name)
+    return latest_test != curr_sha
 
-def test_on_lean_version(version):
+def changes_on_version(version, project_names, version_history):
+    return any(project_has_changes_on_version(version, project_name, version_history) for project_name in project_names)
+
+def test_on_lean_version(version, version_history):
     print(f'\nRunning tests on Lean version {version}')
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
-    print(f'test_repo_2 branches ' + str(projects['test-repo-2'].branches))
+
+    if not changes_on_version(version, ['mathlib'] + version_projects, version_history):
+        print(f'no projects have changed on version {version} since the last run.\n')
+        return
+
     ordered_projects = toposort_flatten({p:projects[p].dependencies for p in version_projects})
     if 'mathlib' in ordered_projects:
         ordered_projects.remove('mathlib')
@@ -132,15 +189,17 @@ def test_on_lean_version(version):
         if p not in version_projects or len(missing_deps) > 0:
             print(f'removing {p}')
             del ordered_projects[i]
-            if len(missing_deps) > 0:
-                failures[p] = DependencyFailure(p, missing_deps, version)
+            if p in version_projects:
+                failing_test(version, p, version_history, failures, DependencyFailure(p, missing_deps, version))
         else:
             i += 1
 
-    print(f'\nbuilding projects in order: {ordered_projects}')
-    update_mathlib_to_version(version)
-    for project_name in ordered_projects:
-        test_project_on_version(project_name, version, failures)
+    if len(ordered_projects) > 0:
+        print(f'\nbuilding projects in order: {ordered_projects}')
+        update_mathlib_to_version(version)
+        add_success_to_version_history(version, 'mathlib', version_history)
+        for project_name in ordered_projects:
+            test_project_on_version(version, project_name, failures, version_history)
 
     if len(failures) > 0:
         print(f'\n{len(failures)} failures:')
@@ -149,9 +208,13 @@ def test_on_lean_version(version):
 
 populate_projects()
 
-test_on_lean_version([3,16,3])
-test_on_lean_version([3,17,0])
-test_on_lean_version([3,17,1])
+version_history = load_version_history()
+
+test_on_lean_version([3,16,3], version_history)
+test_on_lean_version([3,17,0], version_history)
+test_on_lean_version([3,17,1], version_history)
+
+write_version_history(version_history)
 
 # print(toposort_flatten({p : projects[p].dependencies for p in projects}))
 
