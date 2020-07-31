@@ -6,7 +6,6 @@ import yaml
 import git
 import toml
 import subprocess
-import json
 
 @dataclass
 class Project:
@@ -15,11 +14,16 @@ class Project:
     repo: git.Repo
     dependencies: Set[str]
 
-class BuildFailure:
-    def __init__(self, project, version, traceback=None):
-        self.project = project
-        self.version = version
+@dataclass
+class Failure:
+    project: str
+    version: List[int]
+    is_new: bool
+
+class BuildFailure(Failure):
+    def __init__(self, project, version, is_new, traceback=None):
         self.traceback = traceback
+        super().__init__(project, version, is_new)
 
     def find_trans_fail(self):
         return self if self.traceback is None else self.traceback.find_trans_fail()
@@ -30,11 +34,10 @@ class BuildFailure:
             s += f'\n  This may be because of a transitive failure in {self.find_trans_fail().project}'
         return s
 
-class DependencyFailure:
-    def __init__(self, project, dependencies, version):
-        self.project = project
+class DependencyFailure(Failure):
+    def __init__(self, project, version, is_new, dependencies):
         self.dependencies = dependencies
-        self.version = version
+        super().__init__(project, version, is_new)
 
     def __repr__(self):
         return f'{self.project} was not built on version {self.version} because some of its dependencies do not have a corresponding version: {self.dependencies}'
@@ -62,14 +65,16 @@ def lean_version_from_remote_ref(ref):
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
 
-# returns a dict loaded from json
+# returns a dict loaded from yaml
 def load_version_history():
-    with open(root / 'version_history.json', 'r') as json_file:
-        return json.load(json_file)
+    with open(root / 'version_history.yml', 'r') as yaml_file:
+        dic = yaml.safe_load(yaml_file.read())
+        return {} if dic is None else dic
+
 
 def write_version_history(hist):
-    with open(root / 'version_history.json', 'w') as json_file:
-        json.dump(hist, json_file)
+    with open(root / 'version_history.yml', 'w') as yaml_file:
+        yaml.dump(hist, yaml_file)
 
 def populate_projects():
     with open(root/'projects'/'projects.yml', 'r') as project_file:
@@ -118,23 +123,30 @@ def add_success_to_version_history(version, project_name, version_history):
     key = remote_ref_from_lean_version(version)
     sha = get_git_sha(version, project_name)
     if key not in version_history:
-        version_history[key] = {project_name:{'latest_success':sha, 'latest_test':sha}}
+        version_history[key] = {project_name:{'latest_success':sha, 'latest_test':sha, 'success':True}}
     else:
-        version_history[key][project_name] = {'latest_success':sha, 'latest_test':sha}
+        version_history[key][project_name] = {'latest_success':sha, 'latest_test':sha, 'success':True}
 
 def add_failure_to_version_history(version, project_name, version_history):
     key = remote_ref_from_lean_version(version)
     sha = get_git_sha(version, project_name)
     if key not in version_history:
-        version_history[key] = {project_name:{'latest_test':sha}}
+        version_history[key] = {project_name:{'latest_test':sha, 'success':False}}
     elif project_name in version_history[key]:
         version_history[key][project_name]['latest_test'] = sha
+        version_history[key][project_name]['success'] = False
     else:
-        version_history[key][project_name] = {'latest_test':sha}
+        version_history[key][project_name] = {'latest_test':sha, 'success':False}
 
 def failing_test(version, project_name, version_history, failures, new_failure):
     failures[project_name] = new_failure
     add_failure_to_version_history(version, project_name, version_history)
+
+def previous_run_exists_and_failed(version, project_name, version_history):
+    return remote_ref_from_lean_version(version) in version_history \
+      and project_name in version_history[version] \
+      and not version_history[version][project_name]['success']
+
 
 def test_project_on_version(version, project_name, failures, version_history):
     print(f'testing {project_name} on version {version}')
@@ -142,7 +154,8 @@ def test_project_on_version(version, project_name, failures, version_history):
 
     failure = next((failures[dep] for dep in project.dependencies if dep in failures), None)
     if failure is not None:
-        failures[project_name] = BuildFailure(project_name, version, failure)
+        is_new = not previous_run_exists_and_failed(version, project_name, version_history)
+        failing_test(version, project_name, version_history, failures, BuildFailure(project_name, version, is_new, failure))
         return
     repo = project.repo
     repo.head.reset(index=True, working_tree=True)
@@ -155,7 +168,8 @@ def test_project_on_version(version, project_name, failures, version_history):
     if leanpkg_build(project_name):
         add_success_to_version_history(version, project_name, version_history)
     else:
-        failing_test(version, project_name, version_history, failures, BuildFailure(project_name, version, None))
+        is_new = not previous_run_exists_and_failed(version, project_name, version_history)
+        failing_test(version, project_name, version_history, failures, BuildFailure(project_name, version, is_new, None))
 
 def project_has_changes_on_version(version, project_name, version_history):
     key = remote_ref_from_lean_version(version)
@@ -170,6 +184,7 @@ def changes_on_version(version, project_names, version_history):
 
 def test_on_lean_version(version, version_history):
     print(f'\nRunning tests on Lean version {version}')
+    add_success_to_version_history(version, 'mathlib', version_history)
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
 
@@ -190,14 +205,14 @@ def test_on_lean_version(version, version_history):
             print(f'removing {p}')
             del ordered_projects[i]
             if p in version_projects:
-                failing_test(version, p, version_history, failures, DependencyFailure(p, missing_deps, version))
+                is_new = not previous_run_exists_and_failed(version, p, version_history)
+                failing_test(version, p, version_history, failures, DependencyFailure(p, version, is_new, missing_deps))
         else:
             i += 1
 
     if len(ordered_projects) > 0:
         print(f'\nbuilding projects in order: {ordered_projects}')
         update_mathlib_to_version(version)
-        add_success_to_version_history(version, 'mathlib', version_history)
         for project_name in ordered_projects:
             test_project_on_version(version, project_name, failures, version_history)
 
