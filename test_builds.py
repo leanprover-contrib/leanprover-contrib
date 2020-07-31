@@ -100,12 +100,12 @@ Your project has a `lean-{ppversion}` branch, but some of its dependencies do no
 
 root = Path('.').absolute()
 
-git_prefix = 'git@github.com'
+git_prefix = 'https://github.com/'
 
 projects = {}
 
 print('cloning mathlib')
-mathlib_repo = git.Repo.clone_from('git@github.com:leanprover-community/mathlib', root / 'mathlib')
+mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', root / 'mathlib')
 
 def get_project_repo(project_name):
     if project_name == 'mathlib':
@@ -143,7 +143,7 @@ def populate_projects():
     print()
     for project_name in projects_data:
         project_org = projects_data[project_name]['organization']
-        repo = git.Repo.clone_from(f'{git_prefix}:{project_org}/{project_name}', root / project_name)
+        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', root / project_name)
         versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in repo.remotes[0].refs] if vs is not None]
         print(f'{project_name} has {len(versions)} version branches:')
         print(versions)
