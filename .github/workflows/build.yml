@@ -17,9 +17,6 @@ jobs:
         run: |
           set -o pipefail
           curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- --default-toolchain none -y
-          cd mathlib
-          ~/.elan/bin/lean --version
-          echo "::add-path::$HOME/.elan/bin"
 
       - name: install python
         uses: actions/setup-python@v2
