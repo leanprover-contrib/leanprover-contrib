@@ -284,13 +284,22 @@ def test_on_lean_version(version, version_history):
         print(failures[f])
         failures[f].report_issue(version_history, mathlib_prev)
 
+# annoying that lists are unhashable :(
+def collect_versions():
+    versions = [version for project_name in projects for version in projects[project_name].branches]
+    out = []
+    for l in versions:
+        if l not in out:
+            out.append(l)
+    return out
+
+
 populate_projects()
 
 version_history = load_version_history()
 
-test_on_lean_version([3,16,3], version_history)
-test_on_lean_version([3,17,0], version_history)
-test_on_lean_version([3,17,1], version_history)
+for version in collect_versions():
+    test_on_lean_version(version, version_history)
 
 write_version_history(version_history)
 

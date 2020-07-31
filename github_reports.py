@@ -1,7 +1,7 @@
 from github import Github
 import sys
 
-g = Github('leanprover-community-bot', sys.argv[1])
+g = Github(sys.argv[1])
 
 def open_issue_on_failure(repo_name, title, body, tags):
     repo = g.get_repo(repo_name)
