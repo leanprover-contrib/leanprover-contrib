@@ -246,13 +246,14 @@ def test_on_lean_version(version, version_history):
     print(f'\nRunning tests on Lean version {version}')
     key = remote_ref_from_lean_version(version)
     mathlib_prev = version_history[key]['mathlib']['latest_test'] if 'mathlib' in version_history[key] else None
-    add_success_to_version_history(version, 'mathlib', version_history)
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
 
     if not changes_on_version(version, ['mathlib'] + version_projects, version_history):
         print(f'no projects have changed on version {version} since the last run.\n')
         return
+
+    add_success_to_version_history(version, 'mathlib', version_history)
 
     ordered_projects = toposort_flatten({p:projects[p].dependencies for p in version_projects})
     if 'mathlib' in ordered_projects:
