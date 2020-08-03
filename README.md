@@ -51,18 +51,40 @@ Hopefully these restrictions will be loosened as development goes on.
 If you meet these criteria, you can sign up by making a pull request to
 [`projects.yml`](https://github.com/leanprover-contrib/leanprover-contrib/blob/master/projects/projects.yml).
 
+```yaml
+mathematica:
+  description: 'A link between Lean and Mathematica'
+  organization: 'robertylewis'
+  maintainers:
+    - robertylewis
+    - minchaowu
+  report-build-failures: false
+```
+
 Note that if you sign up now, you may get some spam in the form of GitHub issues and notifications.
 This is the price of being an early adopter.
 
+Including the optional `report-build-failures: false` line will prevent the tool
+from opening issues in your repository.
+If you don't have any complicated dependencies (e.g. your project only depends on mathlib),
+and you're using the Lean upgrade action script,
+you likely want to set this to `false`.
+
+## Other Lean action scripts
+
+We strongly recommend installing two GitHub Actions in your project repository.
+
+* [lean-upgrade-action](https://github.com/leanprover-contrib/lean-upgrade-action)
+  will run `leanproject upgrade` daily, and push the result to your repository if it succeeds.
+  This is quite similar to what the `leanprover-contrib` tool does,
+  except it does not handle transitive or diamond dependencies very well
+  (e.g. your repo depends on project A which depends on mathlib).
+* [update-versions-action](https://github.com/leanprover-contrib/update-versions-action)
+  will mirror commits to your `master` branch to the appropriate `lean-x.y.z` branch.
+  The `leanprover-contrib` tool depends on these version branches existing,
+  so if you do not use this action, you will have to maintain them manually.
 
 ## TODO
 
 * Use `mathlibtools` as a Python project instead of `leanproject` CLI?
 * We can list checked in projects on the community website. (Sorted by # of GH stars as popularity maybe?)
-* It's essential that projects keep the latest `lean-3.*.*` branch updated
-  instead of working only on `master`.
-  We should provide a GH Action that mirrors `master` to the right branch.
-* We may want to notice when new Lean versions are released,
-  check if projects can be updated without changes,
-  and suggest to project owners that they create a new `lean-3.*.*` branch.
-  But this should probably be part of local Actions scripts instead.

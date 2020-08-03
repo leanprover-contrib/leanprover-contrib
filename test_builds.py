@@ -16,6 +16,7 @@ class Project:
     dependencies: Set[str]
     organization: str
     owners: List[str]
+    report_failure: bool
 
 @dataclass
 class Failure:
@@ -38,7 +39,7 @@ class BuildFailure(Failure):
         return s
 
     def report_issue(self, version_history, mathlib_prev = None):
-        if self.is_new:
+        if self.is_new and projects[self.project].report_failure:
             version_key = remote_ref_from_lean_version(self.version)
             ppversion = '.'.join(str(s) for s in self.version)
             project = projects[self.project]
@@ -81,7 +82,7 @@ class DependencyFailure(Failure):
         return f'{self.project} was not built on version {self.version} because some of its dependencies do not have a corresponding version: {self.dependencies}'
 
     def report_issue(self, version_history, mathlib_prev = None):
-        if self.is_new:
+        if self.is_new and projects[self.project].report_failure:
             ppversion = '.'.join(str(s) for s in self.version)
             deplist = '\n'.join('* {format_project_link(d)}' for d in self.dependencies)
             s = \
@@ -155,7 +156,8 @@ def populate_projects():
             parsed_toml = toml.loads(lean_toml.read())
         deps = set(d for d in parsed_toml['dependencies'])
         owners = projects_data[project_name]['maintainers']
-        projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners)
+        report_failure = 'report-build-failures' not in projects_data[project_name] or projects_data[project_name]['report-build-failures']
+        projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners, report_failure)
         print(f'{project_name} has dependencies: {deps}')
 
 

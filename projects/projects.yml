@@ -22,9 +22,10 @@ test-repo-2:
   organization: 'leanprover-contrib'
   maintainers:
     - robertylewis
-    
+
 another-test:
   description: ''
   organization: 'leanprover-contrib'
   maintainers:
     - robertylewis
+  report-build-failures: false
