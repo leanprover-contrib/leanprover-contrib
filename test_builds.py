@@ -187,6 +187,7 @@ def add_success_to_version_history(version, project_name, version_history):
     else:
         if project_name in version_history[key] and 'issue' in version_history[key][project_name]:
             github_reports.resolve_issue(f'{projects[project_name].organization}/{project_name}', version_history[key][project_name]['issue'])
+            del version_history[key][project_name]['issue']
         version_history[key][project_name] = {'latest_success':sha, 'latest_test':sha, 'success':True}
 
 def add_failure_to_version_history(version, project_name, version_history):
