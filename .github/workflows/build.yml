@@ -2,7 +2,7 @@ name: build projects
 
 on:
   schedule:
-    - cron: '0 22 * * *' # once a day at 10pm
+    - cron: '0 3 * * *' # once a day at 3am
   push:
     branches:
       - master

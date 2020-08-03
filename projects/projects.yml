@@ -4,12 +4,13 @@
 #   maintainers:
 #     - gebner
 
-# mathematica:
-#   description: 'A link between Lean and Mathematica'
-#   organization: 'robertylewis'
-#   maintainers:
-#     - robertylewis
-#     - minchaowu
+mathematica:
+  description: 'A link between Lean and Mathematica'
+  organization: 'robertylewis'
+  maintainers:
+    - robertylewis
+    - minchaowu
+  report-build-failures: false
 
 test-repo-1:
   description: ''
