@@ -12,6 +12,13 @@ mathematica:
     - minchaowu
   report-build-failures: false
 
+topos:
+  description: 'Topos theory'
+  organization: 'b-mehta'
+  maintainers:
+    - b-mehta
+  report-build-failures: false
+
 test-repo-1:
   description: ''
   organization: 'leanprover-contrib'
