@@ -133,6 +133,10 @@ def load_version_history():
 
 
 def write_version_history(hist):
+    def vers_id(lv):
+        return str(hash(lv) % 100000)
+    def strip_prefix(lv):
+        return [int(i) for i in lv[5:].split('.')]
     with open(root / 'version_history.yml', 'w') as yaml_file:
         yaml.dump(hist, yaml_file)
     project_out = []
@@ -140,13 +144,15 @@ def write_version_history(hist):
         entry = {'name': project}
         for lean_version in hist:
             if project in hist[lean_version]:
-                entry[lean_version] = '✓' if hist[lean_version][project]['success'] else '×'
+                entry[vers_id(lean_version)] = '✓' if hist[lean_version][project]['success'] else '×'
             else:
-                entry[lean_version] = ''
-            project_out.append(entry)
-    version_out = [{'title': 'Project', 'field': 'name'}]
+                entry[vers_id(lean_version)] = ''
+        project_out.append(entry)
+    version_out = []
     for lean_version in hist:
-        version_out.append({'title': lean_version, 'field': lean_version})
+        version_out.append({'title': lean_version, 'field': vers_id(lean_version)})
+    version_out.sort(key=lambda dic: strip_prefix(dic['title']))
+    version_out = [{'title': 'Project', 'field': 'name'}] + version_out
     with open(root / 'projects.js', 'w') as js_file:
         js_file.write('project_cols = ' + str(version_out))
         js_file.write('\nprojects = ' + str(project_out))
