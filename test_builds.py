@@ -248,7 +248,8 @@ def changes_on_version(version, project_names, version_history):
 def test_on_lean_version(version, version_history):
     print(f'\nRunning tests on Lean version {version}')
     key = remote_ref_from_lean_version(version)
-    mathlib_prev = version_history[key]['mathlib']['latest_test'] if 'mathlib' in version_history[key] else None
+    mathlib_prev = version_history[key]['mathlib']['latest_test'] \
+        if key in version_history and 'mathlib' in version_history[key] else None
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
 
