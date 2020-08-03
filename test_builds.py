@@ -116,7 +116,10 @@ def get_project_repo(project_name):
 def lean_version_from_remote_ref(ref):
     if not ref.startswith('origin/lean-'):
         return None
-    return [int(i) for i in ref[12:].split('.')]
+    try:
+        return [int(i) for i in ref[12:].split('.')[0:3]]
+    except Exception:
+        return None
 
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
