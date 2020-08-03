@@ -146,7 +146,7 @@ def write_version_history(hist):
             project_out.append(entry)
     version_out = [{'title': 'Project', 'field': 'name'}]
     for lean_version in hist:
-        version_out.append({'title': lean_version, field: lean_version})
+        version_out.append({'title': lean_version, 'field': lean_version})
     with open(root / 'projects.js', 'w') as js_file:
         js_file.write('project_cols = ' + str(version_out))
         js_file.write('\nprojects = ' + str(project_out))
