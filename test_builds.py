@@ -135,6 +135,17 @@ def load_version_history():
 def write_version_history(hist):
     with open(root / 'version_history.yml', 'w') as yaml_file:
         yaml.dump(hist, yaml_file)
+    project_out = []
+    for project in projects:
+        entry = {'name': project}
+        for lean_version in hist:
+            if project in hist[lean_version]:
+                entry[lean_version] = '✓' if hist[lean_version][project]['success'] else '×'
+            else:
+                entry[lean_version] = ''
+            project_out.append(entry)
+    with open(root / 'projects.js', 'w') as js_file:
+        js_file.write('projects = ' + str(project_out))
 
 def populate_projects():
     with open(root/'projects'/'projects.yml', 'r') as project_file:
