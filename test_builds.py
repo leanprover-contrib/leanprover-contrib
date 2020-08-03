@@ -144,8 +144,12 @@ def write_version_history(hist):
             else:
                 entry[lean_version] = ''
             project_out.append(entry)
+    version_out = [{'title': 'Project', 'field': 'name'}]
+    for lean_version in hist:
+        version_out.append({'title': lean_version, field: lean_version})
     with open(root / 'projects.js', 'w') as js_file:
-        js_file.write('projects = ' + str(project_out))
+        js.write('project_cols = ' + srt(version_out))
+        js_file.write('\nprojects = ' + str(project_out))
 
 def populate_projects():
     with open(root/'projects'/'projects.yml', 'r') as project_file:
