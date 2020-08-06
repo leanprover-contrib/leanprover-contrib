@@ -1,8 +1,8 @@
-# super2:
-#   description: 'superposition'
-#   organization: 'gebner'
-#   maintainers:
-#     - gebner
+super2:
+  description: 'Small superposition prover, version 2'
+  organization: 'gebner'
+  maintainers:
+    - gebner
 
 mathematica:
   description: 'A link between Lean and Mathematica'
