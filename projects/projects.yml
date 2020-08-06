@@ -1,3 +1,9 @@
+super:
+  description: 'Small superposition prover, version 1'
+  organization: 'leanprover'
+  maintainers:
+    - gebner
+
 super2:
   description: 'Small superposition prover, version 2'
   organization: 'gebner'
