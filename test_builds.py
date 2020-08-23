@@ -141,7 +141,7 @@ def write_version_history(hist):
     with open(root / 'version_history.yml', 'w') as yaml_file:
         yaml.dump(hist, yaml_file)
     project_out = []
-    for project in [project for projects in projects if projects[project]['display']]:
+    for project in [project for project in projects if projects[project].display]:
         entry = {'name': project}
         for lean_version in hist:
             if project in hist[lean_version]:
