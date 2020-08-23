@@ -1,17 +1,49 @@
 super:
-  description: 'Small superposition prover, version 1'
+  description: |
+    Version one of a small superposition prover
+    written in Lean. This repository introduces
+    a tactic `super` which attempts to solve 
+    problems in first order logic, possibly 
+    given a list of extra hypotheses.
+
+    This version is not compatible with community
+    releases of Lean.
   organization: 'leanprover'
   maintainers:
     - gebner
 
 super2:
-  description: 'Small superposition prover, version 2'
+  description: |
+    Version two of a small superposition prover
+    written in Lean. This repository introduces
+    a tactic `super` which attempts to solve 
+    problems in first order logic, possibly 
+    given a list of extra hypotheses.
   organization: 'gebner'
   maintainers:
     - gebner
 
 mathematica:
-  description: 'A link between Lean and Mathematica'
+  description: |
+    Connects Lean to the computer algebra system
+    Mathematica. This project offers a 
+    bi-directional translation between the two
+    systems. From within Lean, you can evaluate
+    Mathematica commands, possibly including
+    translated Lean expressions, and process
+    the results. From Mathematica, you can access
+    a Lean environment.
+
+    Examples of calling Mathematica from Lean
+    can be found at 
+    [robertylewis/mathematica_examples](https://github.com/robertylewis/mathematica_examples),
+    and examples in the other direction at 
+    [minchaowu/mm-lean](https://github.com/minchaowu/mm-lean).
+    These repositories are not in the contrib list
+    because they depend on Mathematica, which 
+    is proprietary software. 
+    See also our [project webpage](http://robertylewis.com/leanmm/index.html)
+    with a link to our paper about this project.
   organization: 'robertylewis'
   maintainers:
     - robertylewis
@@ -19,7 +51,8 @@ mathematica:
   report-build-failures: false
 
 topos:
-  description: 'Topos theory'
+  description: |
+    This is a WIP project to define some topos theory within the Lean theorem prover.
   organization: 'b-mehta'
   maintainers:
     - b-mehta
@@ -30,12 +63,14 @@ test-repo-1:
   organization: 'leanprover-contrib'
   maintainers:
     - robertylewis
+  display: false
 
 test-repo-2:
   description: ''
   organization: 'leanprover-contrib'
   maintainers:
     - robertylewis
+  display: false
 
 another-test:
   description: ''
@@ -43,3 +78,4 @@ another-test:
   maintainers:
     - robertylewis
   report-build-failures: false
+  display: false
