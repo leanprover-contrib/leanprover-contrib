@@ -156,7 +156,7 @@ def write_version_history(hist):
     version_out = []
     for lean_version in hist2:
         version_out.append({'title': lean_version, 'field': vers_id(lean_version), 'minWidth':120})
-    version_out.sort(key=lambda dic: strip_prefix(dic['title']))
+    version_out.sort(key=lambda dic: strip_prefix(dic['title']), reverse=True)
     version_out = [{'title': 'Project', 'field': 'name', 'minWidth':120}] + version_out
     with open(root / 'projects.js', 'w') as js_file:
         js_file.write('project_cols = ' + str(version_out))
