@@ -302,7 +302,7 @@ def test_on_lean_version(version, version_history):
         else:
             i += 1
 
-    if len(ordered_projects) > 0:
+    if len(ordered_projects) > 0 and any(project != 'mathlib' for project in ordered_projects):
         print(f'\nbuilding projects in order: {ordered_projects}')
         if 'mathlib' in ordered_projects:
             update_mathlib_to_version(version)
