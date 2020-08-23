@@ -286,6 +286,9 @@ def test_on_lean_version(version, version_history):
         print(f'no projects have changed on version {version} since the last run.\n')
         return
 
+    if version in projects['mathlib'].branches:
+        add_success_to_version_history(version, 'mathlib', version_history)
+
     ordered_projects = toposort_flatten({p:projects[p].dependencies for p in version_projects})
     # if 'mathlib' in ordered_projects:
     #     ordered_projects.remove('mathlib')
