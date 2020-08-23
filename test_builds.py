@@ -17,6 +17,7 @@ class Project:
     organization: str
     owners: List[str]
     report_failure: bool
+    display: bool
 
 @dataclass
 class Failure:
@@ -140,7 +141,7 @@ def write_version_history(hist):
     with open(root / 'version_history.yml', 'w') as yaml_file:
         yaml.dump(hist, yaml_file)
     project_out = []
-    for project in projects:
+    for project in [project for projects in projects if projects[project]['display']]:
         entry = {'name': project}
         for lean_version in hist:
             if project in hist[lean_version]:
@@ -178,11 +179,12 @@ def populate_projects():
         deps = set(d for d in parsed_toml['dependencies'])
         owners = projects_data[project_name]['maintainers']
         report_failure = 'report-build-failures' not in projects_data[project_name] or projects_data[project_name]['report-build-failures']
-        projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners, report_failure)
+        display = 'display' not in projects_data[project_name] or projects_data[project_name]['display']
+        projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners, report_failure, display)
         print(f'{project_name} has dependencies: {deps}')
 
     mathlib_versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in mathlib_repo.remotes[0].refs] if vs is not None]
-    projects['mathlib'] = Project('mathlib', mathlib_versions, mathlib_repo, set(), 'leanprover-community', ['leanprover-community-bot'], False)
+    projects['mathlib'] = Project('mathlib', mathlib_versions, mathlib_repo, set(), 'leanprover-community', ['leanprover-community-bot'], False, True)
 
 
 def checkout_version(repo, version):
