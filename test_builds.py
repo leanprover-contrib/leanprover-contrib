@@ -44,10 +44,10 @@ class BuildFailure(Failure):
             ppversion = '.'.join(str(s) for s in self.version)
             project = projects[self.project]
             branch_url = f'https://github.com/{project.organization}/{self.project}/tree/lean-{ppversion}'
-            mathlib_curr = version_history[version_key]['mathlib']['latest_test']
+            mathlib_curr = version_history[version_key]['mathlib']['latest_test'] if 'mathlib' in version_history[version_key] else None
             # if mathlib_prev is not None and mathlib_prev != :
             git_diff_url = f'https://github.com/leanprover-community/mathlib/compare/{mathlib_prev}...{mathlib_curr}' \
-                if mathlib_prev is not None and mathlib_prev != mathlib_curr \
+                if mathlib_prev is not None and mathlib_curr is not None and mathlib_prev != mathlib_curr \
                 else None
 
             s = \
@@ -181,6 +181,9 @@ def populate_projects():
         projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners, report_failure)
         print(f'{project_name} has dependencies: {deps}')
 
+    mathlib_versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in mathlib_repo.remotes[0].refs] if vs is not None]
+    projects['mathlib'] = Project('mathlib', mathlib_versions, mathlib_repo, set(), 'leanprover-community', ['leanprover-community-bot'], False)
+
 
 def checkout_version(repo, version):
     repo.remotes[0].refs.__getattr__(remote_ref_from_lean_version(version)).checkout()
@@ -277,21 +280,19 @@ def test_on_lean_version(version, version_history):
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
 
-    if not changes_on_version(version, ['mathlib'] + version_projects, version_history):
+    if not changes_on_version(version, version_projects, version_history):
         print(f'no projects have changed on version {version} since the last run.\n')
         return
 
-    add_success_to_version_history(version, 'mathlib', version_history)
-
     ordered_projects = toposort_flatten({p:projects[p].dependencies for p in version_projects})
-    if 'mathlib' in ordered_projects:
-        ordered_projects.remove('mathlib')
+    # if 'mathlib' in ordered_projects:
+    #     ordered_projects.remove('mathlib')
 
     failures = {}
     i = 0
     while i < len(ordered_projects):
         p = ordered_projects[i]
-        missing_deps = [dep for dep in projects[p].dependencies if dep not in ordered_projects and dep != 'mathlib']
+        missing_deps = [dep for dep in projects[p].dependencies if dep not in ordered_projects]
         if p not in version_projects or len(missing_deps) > 0:
             print(f'removing {p}')
             del ordered_projects[i]
@@ -303,8 +304,9 @@ def test_on_lean_version(version, version_history):
 
     if len(ordered_projects) > 0:
         print(f'\nbuilding projects in order: {ordered_projects}')
-        update_mathlib_to_version(version)
-        for project_name in ordered_projects:
+        if 'mathlib' in ordered_projects:
+            update_mathlib_to_version(version)
+        for project_name in [project_name for project_name in ordered_projects if project_name != 'mathlib']:
             test_project_on_version(version, project_name, failures, version_history)
 
     if len(failures) > 0:
