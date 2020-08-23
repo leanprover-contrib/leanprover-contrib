@@ -116,10 +116,8 @@ def get_project_repo(project_name):
         return projects[project_name].repo
 
 def lean_version_from_remote_ref(ref):
-    if not ref.startswith('origin/lean-'):
-        return None
     try:
-        return [int(i) for i in ref[12:].split('.')[0:3]]
+        return [int(i) for i in ref.split('lean-')[-1].split('.')[0:3]]
     except Exception:
         return None
 
@@ -138,22 +136,28 @@ def write_version_history(hist):
         return str(hash(lv) % 100000)
     def strip_prefix(lv):
         return [int(i) for i in lv[5:].split('.')]
+    def not_only_mathlib(lv):
+        lvr = lean_version_from_remote_ref(lv)
+        print(lvr)
+        return any(p for p in projects if p != 'mathlib' and lvr in projects[p].branches)
     with open(root / 'version_history.yml', 'w') as yaml_file:
         yaml.dump(hist, yaml_file)
+    hist2 = [lv for lv in hist if not_only_mathlib(lv)]
+    print(hist2)
     project_out = []
     for project in [project for project in projects if projects[project].display]:
         entry = {'name': project}
-        for lean_version in hist:
+        for lean_version in hist2:
             if project in hist[lean_version]:
                 entry[vers_id(lean_version)] = '✓' if hist[lean_version][project]['success'] else '×'
             else:
                 entry[vers_id(lean_version)] = ''
         project_out.append(entry)
     version_out = []
-    for lean_version in hist:
-        version_out.append({'title': lean_version, 'field': vers_id(lean_version)})
+    for lean_version in hist2:
+        version_out.append({'title': lean_version, 'field': vers_id(lean_version), 'minWidth':120})
     version_out.sort(key=lambda dic: strip_prefix(dic['title']))
-    version_out = [{'title': 'Project', 'field': 'name'}] + version_out
+    version_out = [{'title': 'Project', 'field': 'name', 'minWidth':120}] + version_out
     with open(root / 'projects.js', 'w') as js_file:
         js_file.write('project_cols = ' + str(version_out))
         js_file.write('\nprojects = ' + str(project_out))
