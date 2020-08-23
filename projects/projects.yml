@@ -58,6 +58,21 @@ topos:
     - b-mehta
   report-build-failures: false
 
+lean-perfectoid-spaces: 
+  description: |
+    Perfectoid spaces are sophisticated objects in arithmetic geometry 
+    introduced by Peter Scholze in 2012. We formalised enough definitions 
+    and theorems in topology, algebra and geometry to define perfectoid 
+    spaces in Lean. See also our
+    [project webpage](https://leanprover-community.github.io/lean-perfectoid-spaces/)
+    and [paper](https://arxiv.org/abs/1910.12320).
+  organization: 'leanprover-community'
+  maintainers:
+    - kbuzzard
+    - jcommelin
+    - PatrickMassot
+  report-build-failures: false
+
 test-repo-1:
   description: ''
   organization: 'leanprover-contrib'
