@@ -139,7 +139,7 @@ def write_version_history(hist):
     def not_only_mathlib(lv):
         lvr = lean_version_from_remote_ref(lv)
         print(lvr)
-        return any(p for p in projects if p != 'mathlib' and lvr in projects[p].branches)
+        return any(p for p in projects if p != 'mathlib' and projects[p].display and lvr in projects[p].branches)
     with open(root / 'version_history.yml', 'w') as yaml_file:
         yaml.dump(hist, yaml_file)
     hist2 = [lv for lv in hist if not_only_mathlib(lv)]
