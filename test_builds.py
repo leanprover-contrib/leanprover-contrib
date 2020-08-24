@@ -135,7 +135,7 @@ def write_version_history(hist):
     def vers_id(lv):
         return str(hash(lv) % 100000)
     def strip_prefix(lv):
-        return [int(i) for i in lv[5:].split('.')]
+        return [int(i) for i in lv.split('.')]
     def not_only_mathlib(lv):
         lvr = lean_version_from_remote_ref(lv)
         print(lvr)
