@@ -7,6 +7,8 @@ import git
 import toml
 import subprocess
 import github_reports
+import sys
+import itertools
 
 @dataclass
 class Project:
@@ -202,20 +204,19 @@ def update_mathlib_to_version(version):
 def leanpkg_add_local_dependency(project_name, dependency):
     subprocess.run(['leanpkg', 'add', root / dependency], cwd= root / project_name)
 
-def early_stop(instr, p):
-    for line in instr:
-        sys.stdout.write(line)
-        if 'error' in line:
-            for line in itertools.islice(sys.stdin, 20):
-                sys.stdout.write(line)
-            p.terminate()
+def fail_with_early_stop(p):
+    while True:
+        output = p.stdout.readline()
+        if (output == b'' or output is None) and p.poll() is not None:
+            return False
+        if output is not None and b'error' in output:
+            p.kill()
+            return True
 
 def leanpkg_build(project_name):
     p = subprocess.Popen(['leanpkg', 'build'], cwd = root / project_name, stdout = subprocess.PIPE)
-    early_stop(p.stdout, p)
-    p.communicate()
-    print(p.returncode)
-    return p.returncode == 0
+    failure = fail_with_early_stop(p)
+    return not failure
 
 def get_git_sha(version, project_name):
     key = remote_ref_from_lean_version(version)
