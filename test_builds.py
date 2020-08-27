@@ -7,8 +7,7 @@ import git
 import toml
 import subprocess
 import github_reports
-import sys
-import itertools
+import re
 
 @dataclass
 class Project:
@@ -205,11 +204,12 @@ def leanpkg_add_local_dependency(project_name, dependency):
     subprocess.run(['leanpkg', 'add', root / dependency], cwd= root / project_name)
 
 def fail_with_early_stop(p):
+    error = re.compile('[^:\n]*:\d*:\d*:\serror')
     while True:
         output = p.stdout.readline()
         if (output == b'' or output is None) and p.poll() is not None:
             return False
-        if output is not None and b'error' in output:
+        if output is not None and error.match(output.decode('utf-8')):
             p.kill()
             return True
 
