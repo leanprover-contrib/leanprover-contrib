@@ -202,9 +202,19 @@ def update_mathlib_to_version(version):
 def leanpkg_add_local_dependency(project_name, dependency):
     subprocess.run(['leanpkg', 'add', root / dependency], cwd= root / project_name)
 
+def early_stop(instr, p):
+    for line in instr:
+        sys.stdout.write(line)
+        if 'error' in line:
+            for line in itertools.islice(sys.stdin, 20):
+                sys.stdout.write(line)
+            p.terminate()
+
 def leanpkg_build(project_name):
-    p = subprocess.Popen(['leanpkg', 'build'], cwd = root / project_name)
+    p = subprocess.Popen(['leanpkg', 'build'], cwd = root / project_name, stdout = subprocess.PIPE)
+    early_stop(p.stdout, p)
     p.communicate()
+    print(p.returncode)
     return p.returncode == 0
 
 def get_git_sha(version, project_name):
