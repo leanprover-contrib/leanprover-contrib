@@ -82,7 +82,7 @@ sudoku:
     from what is already on the board! There are some tactics to help you with
     this, and you can also prove theorems to build up your personal library of
     sudoku theory.
-  origanization: 'TwoFx'
+  organization: 'TwoFx'
   maintainers:
     - TwoFx
   report-build-failures: false
