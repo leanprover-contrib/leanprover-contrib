@@ -85,6 +85,7 @@ sudoku:
   origanization: 'TwoFx'
   maintainers:
     - TwoFx
+  report-build-failures: false
 
 test-repo-1:
   description: ''
