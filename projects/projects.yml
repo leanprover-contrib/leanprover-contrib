@@ -72,6 +72,19 @@ lean-perfectoid-spaces:
     - jcommelin
     - PatrickMassot
   report-build-failures: false
+  
+sudoku:
+  description: |
+    This is an implementation of sudoku, written in Lean. When you open a
+    level in VS Code, a sudoku board is displayed in the goal view. You can
+    put numbers (and also pencil marks) on the board by adding hypotheses,
+    but you have to prove that the placement of the number follows logically
+    from what is already on the board! There are some tactics to help you with
+    this, and you can also prove theorems to build up your personal library of
+    sudoku theory.
+  origanization: 'TwoFx'
+  maintainers:
+    - TwoFx
 
 test-repo-1:
   description: ''
