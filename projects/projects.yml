@@ -87,6 +87,21 @@ sudoku:
     - TwoFx
   report-build-failures: false
 
+lftcm2020:
+  description: |
+    This repository contains tutorials about Lean and mathlib that were developed
+    for the workshop [Lean for the Curious Mathematician](https://leanprover-community.github.io/lftcm2020/),
+    held in July 2020. The tutorials range from introductory lessons on numbers,
+    logic, and sets to advanced lessons on category theory and manifolds.
+    In addition to the materials found in this repository, we recommend watching
+    the [videos](https://www.youtube.com/playlist?list=PLlF-CfQhukNlxexiNJErGJd2dte_J1t1N)
+    of the tutorials and lectures from the workshop.
+  organization: 'leanprover-community'
+  maintainers:
+    - jcommelin
+    - PatrickMassot
+  report-build-failures: false
+
 test-repo-1:
   description: ''
   organization: 'leanprover-contrib'
