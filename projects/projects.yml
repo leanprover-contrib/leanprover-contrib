@@ -101,6 +101,20 @@ lftcm2020:
     - jcommelin
     - PatrickMassot
   report-build-failures: false
+  
+rubiks-cube-group:
+  description: |
+    This project formalizes the Rubik's cube group as a product of corner orientation,
+    corner permutation, edge orientation, and edge permutation.
+
+    The solvable subgroup is defined as the the set of positions where both orientations sum
+    to 0 and the permutations have the same sign.
+
+    This project includes a widget to visualize elements of the group as physical puzzle states.
+  organization: 'kendfrey'
+  maintainers:
+    - kendfrey
+  report-build-failures: false
 
 test-repo-1:
   description: ''
