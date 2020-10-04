@@ -52,7 +52,7 @@ mathematica:
 
 topos:
   description: |
-    This repository contains formal verification of results in Topos Theory, drawing from "Sheaves in Geometry and Logic" and "Sketches of an Elephant". It currently includes a range of constructions and theorems about both Grothendieck topoi and elementary toposes.
+    This repository contains formal verifications of results in Topos Theory, drawing from "Sheaves in Geometry and Logic" and "Sketches of an Elephant". It currently includes a range of constructions and theorems about both Grothendieck topoi and elementary toposes.
   organization: 'b-mehta'
   maintainers:
     - b-mehta
