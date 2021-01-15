@@ -116,6 +116,16 @@ rubiks-cube-group:
     - kendfrey
   report-build-failures: false
 
+lean-liquid: 
+  description: |
+    Liquid Tensor Experiment is a challenge by Peter Scholze
+    to formalize parts of condensed mathematics,
+    culminating in the main theorem of liquid modules.
+  organization: 'leanprover-community'
+  maintainers:
+    - jcommelin
+  report-build-failures: false
+
 test-repo-1:
   description: ''
   organization: 'leanprover-contrib'
