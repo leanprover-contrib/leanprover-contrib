@@ -126,24 +126,19 @@ lean-liquid:
     - jcommelin
   report-build-failures: false
 
-test-repo-1:
-  description: ''
-  organization: 'leanprover-contrib'
+lean-gptf:
+  description: |
+    Provides an interactive frontend to Lean GPT-f, 
+    a neural theorem prover which relies on a large Transformer language model to suggest tactics. 
+    It can prove nearly 50% of the remaining theorems in a held-out test set. 
+    See Jason Rute's [talk at Lean Together 2021](https://www.youtube.com/watch?v=eSXiClL4COw).
+  organization: 'jesse-michael-han'
   maintainers:
-    - robertylewis
-  display: false
-
-test-repo-2:
-  description: ''
-  organization: 'leanprover-contrib'
-  maintainers:
-    - robertylewis
-  display: false
-
-another-test:
-  description: ''
-  organization: 'leanprover-contrib'
-  maintainers:
-    - robertylewis
+    - jesse-michael-han
+    - jasonrute
+    - tonuwu95 
+    - edayers
+    - spolu
   report-build-failures: false
-  display: false
+  
+  
