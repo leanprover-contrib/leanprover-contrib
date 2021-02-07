@@ -33,7 +33,9 @@ jobs:
         run: curl https://raw.githubusercontent.com/leanprover-contrib/leanprover-contrib/store-version-history/version_history.yml --output version_history.yml
 
       - name: build projects
-        run: python test_builds.py ${{ secrets.LCB_TOKEN }}
+        run: |
+          export OPENAI_API_KEY="${{ secrets.OPENAI_KEY }}" 
+          python test_builds.py ${{ secrets.LCB_TOKEN }}
 
       - name: push version history
         run: |
