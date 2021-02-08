@@ -136,7 +136,7 @@ lean-gptf:
   maintainers:
     - jesse-michael-han
     - jasonrute
-    - tonuwu95 
+    - tonywu95 
     - edayers
     - spolu
   report-build-failures: false
