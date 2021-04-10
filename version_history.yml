@@ -1,0 +1,436 @@
+lean-3.10.0:
+  mathlib:
+    latest_success: a584d527e43639156a2e1bd715986ab082e0dafe
+    latest_test: a584d527e43639156a2e1bd715986ab082e0dafe
+    success: true
+lean-3.11.0:
+  mathlib:
+    latest_success: 14a82b30165faa50113cbf463e5bc42e1f53a5ff
+    latest_test: 14a82b30165faa50113cbf463e5bc42e1f53a5ff
+    success: true
+lean-3.12.0:
+  mathlib:
+    latest_success: 3449510c095f2f9dc81456cebf1f0054d0bb8231
+    latest_test: 3449510c095f2f9dc81456cebf1f0054d0bb8231
+    success: true
+lean-3.13.1:
+  mathlib:
+    latest_success: 93119dd66bf63f38aa4a2fbdd7506cef4ccac1c6
+    latest_test: 93119dd66bf63f38aa4a2fbdd7506cef4ccac1c6
+    success: true
+lean-3.13.2:
+  mathlib:
+    latest_success: ab5d0f15414d9222d05aba626f2411c651e4426f
+    latest_test: ab5d0f15414d9222d05aba626f2411c651e4426f
+    success: true
+lean-3.14.0:
+  mathlib:
+    latest_success: 25fc0a8f779d7299a7dc2d17c1589f4b8bb1a571
+    latest_test: 25fc0a8f779d7299a7dc2d17c1589f4b8bb1a571
+    success: true
+lean-3.15.0:
+  mathlib:
+    latest_success: b932a51056c3c46004f45b616c157a8f353a3f1a
+    latest_test: b932a51056c3c46004f45b616c157a8f353a3f1a
+    success: true
+lean-3.16.0:
+  mathlib:
+    latest_success: daed8a41c379385c0beb1184f37d43870d6f8607
+    latest_test: daed8a41c379385c0beb1184f37d43870d6f8607
+    success: true
+lean-3.16.1:
+  mathlib:
+    latest_success: 14292790529293a7ebc8caa70fc26b374e52a799
+    latest_test: 14292790529293a7ebc8caa70fc26b374e52a799
+    success: true
+lean-3.16.2:
+  mathlib:
+    latest_success: 24792be6322ee73df596e1bebdb7e9215de3522c
+    latest_test: 24792be6322ee73df596e1bebdb7e9215de3522c
+    success: true
+lean-3.16.3:
+  mathematica:
+    latest_success: 8440286c90de7857c969c44b29e233283761a55f
+    latest_test: 8440286c90de7857c969c44b29e233283761a55f
+    success: true
+  mathlib:
+    latest_success: f05933654f0abf64f112854ac8db97691c6528b0
+    latest_test: f05933654f0abf64f112854ac8db97691c6528b0
+    success: true
+  test-repo-1:
+    latest_success: 1314227de66884d964c58c89c6ad4f7700708288
+    latest_test: 1314227de66884d964c58c89c6ad4f7700708288
+    success: true
+  test-repo-2:
+    latest_success: 4168419f8ac8cb157ec3325d50717bf8a892352d
+    latest_test: 4168419f8ac8cb157ec3325d50717bf8a892352d
+    success: true
+lean-3.16.4:
+  mathlib:
+    latest_success: 7d331eb9124fb4c8051d1028abf2caeedf13aadf
+    latest_test: 7d331eb9124fb4c8051d1028abf2caeedf13aadf
+    success: true
+lean-3.16.5:
+  mathlib:
+    latest_success: f06e4e00a32ce6a349a0d2b0e3a65cd453599dbd
+    latest_test: f06e4e00a32ce6a349a0d2b0e3a65cd453599dbd
+    success: true
+lean-3.17.0:
+  mathlib:
+    latest_success: 27f622eff9ab56d2fe7f8f619dc5f6b4caf1c31e
+    latest_test: 27f622eff9ab56d2fe7f8f619dc5f6b4caf1c31e
+    success: true
+  test-repo-2:
+    issue: 3
+    latest_test: 082eb29d90021a1cf4d35e568db7e5ee63fdecb5
+    success: false
+lean-3.17.1:
+  another-test:
+    issue: 2
+    latest_test: 1aa3a7425478c9962d14fa4f80a9cb651ff1483e
+    success: false
+  mathematica:
+    latest_success: 25d8d02ba9d91add2b8d7fdc588c9ebedf022990
+    latest_test: 25d8d02ba9d91add2b8d7fdc588c9ebedf022990
+    success: true
+  mathlib:
+    latest_success: 92a20e647b829d160c35b42358f45b0bec1ff5e8
+    latest_test: 92a20e647b829d160c35b42358f45b0bec1ff5e8
+    success: true
+  super2:
+    latest_success: 28d5c48f30fade107f39a0d57946fb8f33ba57ae
+    latest_test: 28d5c48f30fade107f39a0d57946fb8f33ba57ae
+    success: true
+  test-repo-1:
+    latest_success: 1137169a896d18e923b244bd9d13a46c2a64b8a0
+    latest_test: 1137169a896d18e923b244bd9d13a46c2a64b8a0
+    success: true
+lean-3.18.4:
+  another-test:
+    latest_success: d123b638fc13304e70ff7947604df63d1f7bd774
+    latest_test: 1948932e8813c57df2c1f30a30681ef1ee8c3345
+    success: false
+  mathematica:
+    latest_success: 1324ab17aca442da09daec4fc3277420a0fb67bb
+    latest_test: 1324ab17aca442da09daec4fc3277420a0fb67bb
+    success: true
+  mathlib:
+    latest_success: 17c4651c593391462d55f7f990dc05e54ec8ee39
+    latest_test: 17c4651c593391462d55f7f990dc05e54ec8ee39
+    success: true
+  sudoku:
+    latest_success: 81f80cd29f211957a1a669465bd30c900bb164d4
+    latest_test: 81f80cd29f211957a1a669465bd30c900bb164d4
+    success: true
+  super2:
+    issue: 3
+    latest_test: be320a901bd1d3f7dc50ac497a640f810bbb2657
+    success: false
+  test-repo-1:
+    issue: 13
+    latest_success: ad93c66b8566bafa5db241d28639344bcd7687ce
+    latest_test: 6673c84f388642216c38dfd9a2188ff8e87651ee
+    success: false
+  test-repo-2:
+    issue: 4
+    latest_success: aaa1b3fbf34cfde2b7315a0ac5095854cc766e11
+    latest_test: aaa1b3fbf34cfde2b7315a0ac5095854cc766e11
+    success: false
+  topos:
+    latest_success: b3d6a91d216a850aad3dfc68bf3a8521603bbb76
+    latest_test: b3d6a91d216a850aad3dfc68bf3a8521603bbb76
+    success: true
+lean-3.19.0:
+  lftcm2020:
+    latest_success: 15587047ae47dde4e9612b73e2ac2074d4b680fe
+    latest_test: 15587047ae47dde4e9612b73e2ac2074d4b680fe
+    success: true
+  mathematica:
+    latest_success: 6b645b16a1f8a497680acad8b5e289dd55e4f8f6
+    latest_test: 6b645b16a1f8a497680acad8b5e289dd55e4f8f6
+    success: true
+  mathlib:
+    latest_success: d5be9f388a19f891daed609add98153b3024c100
+    latest_test: d5be9f388a19f891daed609add98153b3024c100
+    success: true
+  sudoku:
+    latest_success: f11b8dd2a18e61e96bf413af2c75ee37398391e1
+    latest_test: f11b8dd2a18e61e96bf413af2c75ee37398391e1
+    success: true
+  super2:
+    issue: 4
+    latest_test: be320a901bd1d3f7dc50ac497a640f810bbb2657
+    success: false
+  test-repo-1:
+    latest_success: 51e7783688f7104e841056a72dde2b1735e38e87
+    latest_test: 51e7783688f7104e841056a72dde2b1735e38e87
+    success: true
+  test-repo-2:
+    issue: 5
+    latest_success: 7916db751e7717b3555f0f44098e2e464d9719dc
+    latest_test: 7916db751e7717b3555f0f44098e2e464d9719dc
+    success: false
+  topos:
+    latest_success: 22434e80755f6288527c44d2dd9550d81c461171
+    latest_test: 22434e80755f6288527c44d2dd9550d81c461171
+    success: true
+lean-3.2.0:
+  super:
+    issue: 7
+    latest_test: f557a546ed0a2d1a5cd91f1d68b656c944a8fdb0
+    success: false
+lean-3.20.0:
+  lftcm2020:
+    latest_success: a3f949b9ff369ad41460604ae6ef3e3d1f0b757e
+    latest_test: a3f949b9ff369ad41460604ae6ef3e3d1f0b757e
+    success: true
+  mathematica:
+    latest_success: 209cf0477e901cd0c1be639f655f2a27358ab944
+    latest_test: 209cf0477e901cd0c1be639f655f2a27358ab944
+    success: true
+  mathlib:
+    latest_success: 9379050719fa9f2605289bd85a0fb29100084eb3
+    latest_test: 9379050719fa9f2605289bd85a0fb29100084eb3
+    success: true
+  rubiks-cube-group:
+    latest_success: 3baebd73972384294931c75d584a491eb0fbc15c
+    latest_test: 3baebd73972384294931c75d584a491eb0fbc15c
+    success: true
+  sudoku:
+    latest_success: 2ce4b5d77b886a37cef41ef4f5bb62cdd1b27714
+    latest_test: 2ce4b5d77b886a37cef41ef4f5bb62cdd1b27714
+    success: true
+  test-repo-2:
+    issue: 6
+    latest_test: 0a37d10212b2bc85e5363dafda5e084985b8307e
+    success: false
+  topos:
+    latest_success: 5e0783fb0b0960567ca4a6c3ccdc3827005eb035
+    latest_test: 5cda6558120eb3351638c6b21e59ab29dcc37d28
+    success: false
+lean-3.21.0:
+  lftcm2020:
+    latest_success: 77453ed2871c91a2f99f4e1fc9d540207a067669
+    latest_test: 77453ed2871c91a2f99f4e1fc9d540207a067669
+    success: false
+  mathematica:
+    latest_success: cad7fce7b68c7013f990a2cb47cb569029b65cd1
+    latest_test: cad7fce7b68c7013f990a2cb47cb569029b65cd1
+    success: true
+  mathlib:
+    latest_success: 69db7a330df86247f47a84fab0f52ab9274ca29b
+    latest_test: 69db7a330df86247f47a84fab0f52ab9274ca29b
+    success: true
+  sudoku:
+    latest_success: c01254daf4eb5834d3f2764fd5aa9fa2f01f594c
+    latest_test: c01254daf4eb5834d3f2764fd5aa9fa2f01f594c
+    success: true
+  test-repo-2:
+    issue: 7
+    latest_test: 894c76cd317a09189143f53642a61198093310bb
+    success: false
+lean-3.22.0:
+  mathematica:
+    latest_success: 860a4c70d0cae58abdd7211ab951b7ebae2658e7
+    latest_test: 860a4c70d0cae58abdd7211ab951b7ebae2658e7
+    success: true
+  mathlib:
+    latest_success: 581b2af3eb36e4eb460cce3e3d7842e32e7a3349
+    latest_test: 581b2af3eb36e4eb460cce3e3d7842e32e7a3349
+    success: true
+  sudoku:
+    latest_success: 1b0ef89fffece674b661d9bfe6a141d66befc474
+    latest_test: 1b0ef89fffece674b661d9bfe6a141d66befc474
+    success: true
+  test-repo-2:
+    issue: 8
+    latest_test: 5562c284781ecf8c100b589d47d0846d503a5378
+    success: false
+lean-3.23.0:
+  lean-liquid:
+    latest_success: d6be426ffc9bc78a6e1e5e883dfe6eb7ed84c864
+    latest_test: d6be426ffc9bc78a6e1e5e883dfe6eb7ed84c864
+    success: true
+  lftcm2020:
+    latest_success: b7e11ffe33933b509e9494fdac46c9a63e65350f
+    latest_test: b7e11ffe33933b509e9494fdac46c9a63e65350f
+    success: true
+  mathematica:
+    latest_success: 1f3c160300eadaec3f8802e2fa812c926ca0b893
+    latest_test: 1f3c160300eadaec3f8802e2fa812c926ca0b893
+    success: true
+  mathlib:
+    latest_success: 3669cb35c578441812ad30fd967d21a94b6f387e
+    latest_test: 3669cb35c578441812ad30fd967d21a94b6f387e
+    success: true
+  sudoku:
+    latest_success: 383b2f38f1d919a8665b58cb96bebda1a2cd89ac
+    latest_test: 383b2f38f1d919a8665b58cb96bebda1a2cd89ac
+    success: true
+  test-repo-2:
+    issue: 9
+    latest_test: 44ddcfbb2881c041f004f4bc3f6c39d32fb02f7a
+    success: false
+  topos:
+    latest_success: da9c86991dfbed3618276d0d8f2e0525d3448140
+    latest_test: da9c86991dfbed3618276d0d8f2e0525d3448140
+    success: true
+lean-3.24.0:
+  lean-liquid:
+    latest_success: b88e023230920e5c1608c789046d9b12e1efc494
+    latest_test: b88e023230920e5c1608c789046d9b12e1efc494
+    success: true
+  lftcm2020:
+    latest_success: e010712d0b12b892f2fc8d8be4839da49172601c
+    latest_test: e010712d0b12b892f2fc8d8be4839da49172601c
+    success: true
+  mathematica:
+    latest_success: dec52ca17b783c1dd27b5aca91ea030c26c55708
+    latest_test: dec52ca17b783c1dd27b5aca91ea030c26c55708
+    success: true
+  mathlib:
+    latest_success: e5f9409cd645db4734e2fd09e6d1a120e8405dd0
+    latest_test: e5f9409cd645db4734e2fd09e6d1a120e8405dd0
+    success: true
+  sudoku:
+    latest_success: e13e26095e0f16b3ac5e3b8381d8b81bd8a40367
+    latest_test: e13e26095e0f16b3ac5e3b8381d8b81bd8a40367
+    success: true
+  topos:
+    latest_success: db4278e282c57e539c86a509bd3de96d2c91f7f1
+    latest_test: c9032b11789e36038bc841a1e2b486972421b983
+    success: false
+lean-3.26.0:
+  lean-gptf:
+    latest_success: 3e20785d65604744e9e2dc9d710a695a7355fd2c
+    latest_test: 3e20785d65604744e9e2dc9d710a695a7355fd2c
+    success: true
+  lean-liquid:
+    latest_success: f9c49eacdd7058fded477ce18e1e962d1ee9ad2b
+    latest_test: f9c49eacdd7058fded477ce18e1e962d1ee9ad2b
+    success: true
+  lftcm2020:
+    latest_success: f5128777b2ba888f041469f236ea7c73d4602d7d
+    latest_test: f5128777b2ba888f041469f236ea7c73d4602d7d
+    success: true
+  mathematica:
+    latest_success: 5a7d6c24e3a4b99bfdd7221b65e4fb7deee21f65
+    latest_test: 5a7d6c24e3a4b99bfdd7221b65e4fb7deee21f65
+    success: true
+  mathlib:
+    latest_success: 093888086c67331db6c365194143d5cf139d3967
+    latest_test: 093888086c67331db6c365194143d5cf139d3967
+    success: true
+  sudoku:
+    latest_success: 56800c6b9145b62924cc13f934bc579708aeab1b
+    latest_test: 56800c6b9145b62924cc13f934bc579708aeab1b
+    success: true
+lean-3.27.0:
+  lean-liquid:
+    latest_test: 42d02503f923885897595ffd4358796cb0bf8469
+    success: false
+  lftcm2020:
+    latest_success: 861140eea37e7745a5ff596e2bb8826ff8c7ac7d
+    latest_test: 861140eea37e7745a5ff596e2bb8826ff8c7ac7d
+    success: true
+  mathematica:
+    latest_success: 6977d53cc8407a1708ec35168085d427dd8633cc
+    latest_test: 6977d53cc8407a1708ec35168085d427dd8633cc
+    success: true
+  mathlib:
+    latest_success: 8d8c35600803f284eca67b337f32186fd6087e9e
+    latest_test: 8d8c35600803f284eca67b337f32186fd6087e9e
+    success: true
+  sudoku:
+    latest_success: 386e74ad399b88bc27bfa3ab7ea6eecfb1228098
+    latest_test: 386e74ad399b88bc27bfa3ab7ea6eecfb1228098
+    success: true
+lean-3.28.0:
+  lean-liquid:
+    latest_test: 3aaacde970104e8a000b8b01e0d826e85ac63c6d
+    success: false
+  lftcm2020:
+    latest_success: 0b764f48b1f5602b61fa6cf1f3ec8c393c077f82
+    latest_test: 0b764f48b1f5602b61fa6cf1f3ec8c393c077f82
+    success: false
+  mathematica:
+    latest_success: 11f48a2d62ec659d3c2d00206646f1c8ab6c9abd
+    latest_test: 11f48a2d62ec659d3c2d00206646f1c8ab6c9abd
+    success: true
+  mathlib:
+    latest_success: 309e3b0887a40ae73b66ada7083aacdb408f90cc
+    latest_test: 309e3b0887a40ae73b66ada7083aacdb408f90cc
+    success: true
+lean-3.3.0:
+  mathlib:
+    latest_success: 6a2607ef3af2b0a5083c03c2b6e3f10a44184fe4
+    latest_test: 6a2607ef3af2b0a5083c03c2b6e3f10a44184fe4
+    success: true
+  super:
+    issue: 8
+    latest_test: 0386fbfaad62bfb92c8b0233802076851549c913
+    success: false
+lean-3.4.0:
+  super:
+    issue: 9
+    latest_test: 0b44cb1679d631b5fa2b7fc6b60a25e1f015de1a
+    success: false
+lean-3.4.1:
+  mathematica:
+    latest_success: 29cd7c36eae542d595daf755aab9f4edcda41176
+    latest_test: 29cd7c36eae542d595daf755aab9f4edcda41176
+    success: true
+  mathlib:
+    latest_success: 019b2364cadb1dd8b30c9f13c602d61c19d3b6ea
+    latest_test: 019b2364cadb1dd8b30c9f13c602d61c19d3b6ea
+    success: true
+  super:
+    latest_success: ea69e23d395df3da3ac1fd28d4934db9dc866bea
+    latest_test: ea69e23d395df3da3ac1fd28d4934db9dc866bea
+    success: true
+lean-3.4.2:
+  lean-perfectoid-spaces:
+    latest_success: d2ba385ea1a408a1aa8b54de1c5389b9c44dfe89
+    latest_test: d2ba385ea1a408a1aa8b54de1c5389b9c44dfe89
+    success: true
+  mathlib:
+    latest_success: dd8da5165bd00b07408dbb87173e96908c6926a4
+    latest_test: dd8da5165bd00b07408dbb87173e96908c6926a4
+    success: true
+  super:
+    latest_success: fe50a40c3e2aeda02aa07c64752b0acf1edd9af4
+    latest_test: fe50a40c3e2aeda02aa07c64752b0acf1edd9af4
+    success: true
+lean-3.5.1:
+  lean-perfectoid-spaces:
+    latest_test: 43954f64ce4afdf4fa39e2aeef8ec43826b24f2a
+    success: false
+  mathlib:
+    latest_success: 8535132345bc8c4f48b56ebf89e0db5bcad8b456
+    latest_test: 8535132345bc8c4f48b56ebf89e0db5bcad8b456
+    success: true
+lean-3.6.1:
+  mathlib:
+    latest_success: 6af37d37ef2e83bac310c4e82b52157e3ae2fbc1
+    latest_test: 6af37d37ef2e83bac310c4e82b52157e3ae2fbc1
+    success: true
+lean-3.7.1:
+  mathlib:
+    latest_success: 34bac8d3688807417caaac4a794241ccbbcc95c0
+    latest_test: 34bac8d3688807417caaac4a794241ccbbcc95c0
+    success: true
+lean-3.7.2:
+  mathlib:
+    latest_success: b15c213a4b4dbf602ca6e130d8a82516ab890fe4
+    latest_test: b15c213a4b4dbf602ca6e130d8a82516ab890fe4
+    success: true
+lean-3.8.0:
+  mathlib:
+    latest_success: 6b095759061cbb736fdd7aaed8ca603a2e657b3e
+    latest_test: 6b095759061cbb736fdd7aaed8ca603a2e657b3e
+    success: true
+lean-3.9.0:
+  mathlib:
+    latest_success: d1eae21454202855aeeda028bd9c39d45c57b6ed
+    latest_test: d1eae21454202855aeeda028bd9c39d45c57b6ed
+    success: true

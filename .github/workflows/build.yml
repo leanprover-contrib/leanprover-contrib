@@ -1,0 +1,47 @@
+name: build projects
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # once a day at 3am
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build projects
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: install elan
+        run: |
+          set -o pipefail
+          curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: install Python dependencies
+        run: python -m pip install --upgrade pip requests markdown2 toml mathlibtools toposort
+
+      - name: retrieve version history
+        run: curl https://raw.githubusercontent.com/leanprover-contrib/leanprover-contrib/store-version-history/version_history.yml --output version_history.yml
+
+      - name: build projects
+        run: |
+          export OPENAI_API_KEY="${{ secrets.OPENAI_KEY }}" 
+          python test_builds.py ${{ secrets.LCB_TOKEN }}
+
+      - name: push version history
+        run: |
+          git config user.email "leanprover.community@gmail.com"
+          git config user.name "leanprover-community-bot"
+          git add version_history.yml projects.js
+          git checkout --orphan master2
+          git commit -m "auto update version history"
+          git push -f origin HEAD:store-version-history
