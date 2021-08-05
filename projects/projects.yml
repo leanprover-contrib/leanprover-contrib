@@ -141,4 +141,13 @@ lean-gptf:
     - spolu
   report-build-failures: false
   
-  
+lean-ga:
+  description: |
+    A formalization of parts of [Geometric Algebra](https://en.wikipedia.org/wiki/Geometric_algebra),
+    and the source from which most of the [`clifford_algebra`](https://leanprover-community.github.io/mathlib_docs/find/clifford_algebra)
+    library graduated to mathlib.
+  organization: 'pygae'
+  maintainers:
+    - eric-wieser
+    - utensil
+  report-build-failures: false
