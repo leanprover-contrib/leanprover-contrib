@@ -151,3 +151,18 @@ lean-ga:
     - eric-wieser
     - utensil
   report-build-failures: false
+
+lean-social-choice:
+  description: |
+    Social Choice Theory is a theoretical framework 
+    at the intersection of philosophy, political science, and 
+    welfare economics. It studies methods for aggregating 
+    individual preferences into collective social welfare functions. 
+    
+    This is a library of noteworthy proofs from Social Choice Theory
+    formalized in Lean.
+  organization: 'asouther4'
+  maintainers:
+    - asouther4
+    - benjamindavidson
+  report-build-failures: false
