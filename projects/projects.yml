@@ -166,3 +166,13 @@ lean-social-choice:
     - asouther4
     - benjamindavidson
   report-build-failures: false
+
+unit-fractions:
+  description: |
+    This project formalizes the main results of the preprint [On a density conjecture about unit fractions](https://arxiv.org/abs/2112.03726) in Lean.
+    One of these results says that any dense set of naturals contains distinct naturals whose reciprocals sum to 1. 
+  organization: 'b-mehta'
+  maintainers:
+    - b-mehta
+    - TFBloom
+  report-build-failures: false
