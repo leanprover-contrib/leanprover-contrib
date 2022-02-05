@@ -167,6 +167,21 @@ lean-social-choice:
     - benjamindavidson
   report-build-failures: false
 
+flt-regular:
+  description: |
+    The goal of this project is to formalize Kummer's proof of Fermat's Last Theorem for regular
+    prime exponents. This was a landmark 19th century result in algebraic number theory, proving the theorem
+    in many new cases at the time, but is quite different to the final proof of the full theorem, due to 
+    Wiles-Taylor. This project hopes to add more material on algebraic number theory and related
+    topics to mathlib in addition to formalizing a version of Kummer's proof.
+  organization: 'leanprover-community'
+  maintainers:
+    - alexjbest
+    - riccardobrasca
+    - ericrbg
+    - CBirkbeck
+  report-build-failures: false 
+  
 unit-fractions:
   description: |
     This project formalizes the main results of the preprint [On a density conjecture about unit fractions](https://arxiv.org/abs/2112.03726) in Lean.
