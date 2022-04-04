@@ -191,3 +191,16 @@ unit-fractions:
     - b-mehta
     - TFBloom
   report-build-failures: false
+
+lean-acl-pairs:
+  description: | 
+    This project contains formalization of the relationship between so-called `acl`-pairs and valuation rings.
+    If `K` and `F` are two fields, a pair of (group) morphisms `f g : Kˣ → F` is called an `acl`-pair provided that `f u * g v = f v * g u` whenever `u + v = 1` in `K`.
+    The main result regarding such pairs shows that they essentially always arise from valuation theory, at least when `F` is a prime field (such as `ℚ` or `zmod p` where `p` is prime).
+    The proofs formalized in this repository are based on ideas of Bogomolov-Tschinkel, Efrat, Koenigsmann, and the author.
+    This repository also formalizes some results about rigid elements and valuation which are due to Arason-Elman-Jacob.
+  organization: 'adamtopaz'
+  maintainers:
+    - adamtopaz
+  report-build-failures: false
+  
