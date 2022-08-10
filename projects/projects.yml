@@ -204,3 +204,11 @@ lean-acl-pairs:
     - adamtopaz
   report-build-failures: false
   
+con-nf:
+  description: |
+    A formalisation of the consistency of Quine's New Foundations axiom system, following [Randall Holmes' proof](https://randall-holmes.github.io/Nfproof/untangled.pdf). This is arguably the longest standing open question in set theory.
+  organization: 'leanprover-community'
+  maintainers:
+    - YaelDillies
+    - zeramorphic
+  report-build-failures: false
