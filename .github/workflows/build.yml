@@ -43,7 +43,7 @@ jobs:
         run: |
           git config user.email "leanprover.community@gmail.com"
           git config user.name "leanprover-community-bot"
-          git add version_history.yml projects.js
+          git add -f version_history.yml projects.js
           git checkout --orphan master2
           git commit -m "auto update version history"
           git push -f origin HEAD:store-version-history
