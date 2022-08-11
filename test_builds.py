@@ -102,13 +102,14 @@ Your project has a `lean-{ppversion}` branch, but some of its dependencies do no
 
 
 root = Path('.').absolute()
+project_root = root / 'projects'
 
 git_prefix = 'https://github.com/'
 
 projects = {}
 
 print('cloning mathlib')
-mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', root / 'mathlib')
+mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib')
 
 def get_project_repo(project_name):
     if project_name == 'mathlib':
@@ -117,10 +118,10 @@ def get_project_repo(project_name):
         return projects[project_name].repo
 
 def lean_version_from_remote_ref(ref):
-    try:
-        return [int(i) for i in ref.split('lean-')[-1].split('.')[0:3]]
-    except Exception:
+    m = re.fullmatch('lean-(\d+).(\d+).(\d+)', ref)
+    if not m:
         return None
+    return [int(i) for i in m.groups()]
 
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
@@ -174,12 +175,12 @@ def populate_projects():
     print()
     for project_name in projects_data:
         project_org = projects_data[project_name]['organization']
-        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', root / project_name)
+        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', project_root / project_name)
         versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in repo.remotes[0].refs] if vs is not None]
         print(f'{project_name} has {len(versions)} version branches:')
         print(versions)
 
-        with open(root / project_name / 'leanpkg.toml', 'r') as lean_toml:
+        with open(project_root / project_name / 'leanpkg.toml', 'r') as lean_toml:
             parsed_toml = toml.loads(lean_toml.read())
         deps = set(d for d in parsed_toml['dependencies'])
         owners = projects_data[project_name]['maintainers']
@@ -198,10 +199,10 @@ def checkout_version(repo, version):
 def update_mathlib_to_version(version):
     print(f'updating mathlib to version {version}')
     checkout_version(mathlib_repo, version)
-    subprocess.run(['leanproject', 'get-mathlib-cache'], cwd = root / 'mathlib')
+    subprocess.run(['leanproject', 'get-mathlib-cache'], cwd = project_root / 'mathlib')
 
 def leanpkg_add_local_dependency(project_name, dependency):
-    subprocess.run(['leanpkg', 'add', root / dependency], cwd= root / project_name)
+    subprocess.run(['leanpkg', 'add', project_root / dependency], cwd= project_root / project_name)
 
 def fail_with_early_stop(p):
     error = re.compile('[^:\n]*:\d*:\d*:\serror')
@@ -214,7 +215,7 @@ def fail_with_early_stop(p):
             return True
 
 def leanpkg_build(project_name):
-    p = subprocess.Popen(['leanpkg', 'build'], cwd = root / project_name, stdout = subprocess.PIPE)
+    p = subprocess.Popen(['leanpkg', 'build'], cwd = project_root / project_name, stdout = subprocess.PIPE)
     failure = fail_with_early_stop(p)
     return not failure
 

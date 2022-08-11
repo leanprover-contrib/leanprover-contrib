@@ -1,0 +1,5 @@
+__pycache__
+projects/*
+!projects/projects.yml
+version_history.yml
+projects.js
