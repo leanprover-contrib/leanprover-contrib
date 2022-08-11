@@ -118,7 +118,8 @@ def get_project_repo(project_name):
         return projects[project_name].repo
 
 def lean_version_from_remote_ref(ref):
-    m = re.fullmatch('origin/lean-(\d+).(\d+).(\d+)', ref)
+    """ Note that ref should be the head name without the leading `origin/` """
+    m = re.fullmatch('lean-(\d+).(\d+).(\d+)', ref)
     if not m:
         return None
     return [int(i) for i in m.groups()]
@@ -176,7 +177,7 @@ def populate_projects():
     for project_name in projects_data:
         project_org = projects_data[project_name]['organization']
         repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', project_root / project_name)
-        versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in repo.remotes[0].refs] if vs is not None]
+        versions = [vs for vs in [lean_version_from_remote_ref(ref.remote_head) for ref in repo.remotes[0].refs] if vs is not None]
         print(f'{project_name} has {len(versions)} version branches:')
         print(versions)
 
@@ -189,7 +190,7 @@ def populate_projects():
         projects[project_name] = Project(project_name, versions, repo, deps, project_org, owners, report_failure, display)
         print(f'{project_name} has dependencies: {deps}')
 
-    mathlib_versions = [vs for vs in [lean_version_from_remote_ref(ref.name) for ref in mathlib_repo.remotes[0].refs] if vs is not None]
+    mathlib_versions = [vs for vs in [lean_version_from_remote_ref(ref.remote_head) for ref in mathlib_repo.remotes[0].refs] if vs is not None]
     projects['mathlib'] = Project('mathlib', mathlib_versions, mathlib_repo, set(), 'leanprover-community', ['leanprover-community-bot'], False, True)
 
 
