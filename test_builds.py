@@ -118,10 +118,10 @@ def get_project_repo(project_name):
         return projects[project_name].repo
 
 def lean_version_from_remote_ref(ref):
-    try:
-        return [int(i) for i in ref.split('lean-')[-1].split('.')[0:3]]
-    except Exception:
+    m = re.fullmatch('lean-(\d+).(\d+).(\d+)', ref)
+    if not m:
         return None
+    return [int(i) for i in m.groups()]
 
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
