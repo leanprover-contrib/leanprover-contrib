@@ -118,7 +118,7 @@ def get_project_repo(project_name):
         return projects[project_name].repo
 
 def lean_version_from_remote_ref(ref):
-    m = re.fullmatch('lean-(\d+).(\d+).(\d+)', ref)
+    m = re.fullmatch('origin/lean-(\d+).(\d+).(\d+)', ref)
     if not m:
         return None
     return [int(i) for i in m.groups()]
