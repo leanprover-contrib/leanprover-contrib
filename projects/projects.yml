@@ -212,3 +212,13 @@ con-nf:
     - YaelDillies
     - zeramorphic
   report-build-failures: false
+  
+ sphere-eversion:
+  description: |
+    In this project we formalize the proof of existence of sphere eversions in Lean. More precisely formalize the full h-principle for open and ample first order differential relations, and deduce existence of sphere eversions as a corollary.
+  organization: 'leanprover-community'
+  maintainers:
+    - PatrickMassot
+    - fpvandoorn
+    - ocfnash
+  report-build-failures: false
