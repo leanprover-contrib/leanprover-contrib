@@ -2,8 +2,8 @@ super:
   description: |
     Version one of a small superposition prover
     written in Lean. This repository introduces
-    a tactic `super` which attempts to solve 
-    problems in first order logic, possibly 
+    a tactic `super` which attempts to solve
+    problems in first order logic, possibly
     given a list of extra hypotheses.
 
     This version is not compatible with community
@@ -16,8 +16,8 @@ super2:
   description: |
     Version two of a small superposition prover
     written in Lean. This repository introduces
-    a tactic `super` which attempts to solve 
-    problems in first order logic, possibly 
+    a tactic `super` which attempts to solve
+    problems in first order logic, possibly
     given a list of extra hypotheses.
   organization: 'gebner'
   maintainers:
@@ -26,7 +26,7 @@ super2:
 mathematica:
   description: |
     Connects Lean to the computer algebra system
-    Mathematica. This project offers a 
+    Mathematica. This project offers a
     bi-directional translation between the two
     systems. From within Lean, you can evaluate
     Mathematica commands, possibly including
@@ -35,13 +35,13 @@ mathematica:
     a Lean environment.
 
     Examples of calling Mathematica from Lean
-    can be found at 
+    can be found at
     [robertylewis/mathematica_examples](https://github.com/robertylewis/mathematica_examples),
-    and examples in the other direction at 
+    and examples in the other direction at
     [minchaowu/mm-lean](https://github.com/minchaowu/mm-lean).
     These repositories are not in the contrib list
-    because they depend on Mathematica, which 
-    is proprietary software. 
+    because they depend on Mathematica, which
+    is proprietary software.
     See also our [project webpage](http://robertylewis.com/leanmm/index.html)
     with a link to our paper about this project.
   organization: 'robertylewis'
@@ -58,11 +58,11 @@ topos:
     - b-mehta
   report-build-failures: false
 
-lean-perfectoid-spaces: 
+lean-perfectoid-spaces:
   description: |
-    Perfectoid spaces are sophisticated objects in arithmetic geometry 
-    introduced by Peter Scholze in 2012. We formalised enough definitions 
-    and theorems in topology, algebra and geometry to define perfectoid 
+    Perfectoid spaces are sophisticated objects in arithmetic geometry
+    introduced by Peter Scholze in 2012. We formalised enough definitions
+    and theorems in topology, algebra and geometry to define perfectoid
     spaces in Lean. See also our
     [project webpage](https://leanprover-community.github.io/lean-perfectoid-spaces/)
     and [paper](https://arxiv.org/abs/1910.12320).
@@ -72,7 +72,7 @@ lean-perfectoid-spaces:
     - jcommelin
     - PatrickMassot
   report-build-failures: false
-  
+
 sudoku:
   description: |
     This is an implementation of sudoku, written in Lean. When you open a
@@ -101,7 +101,7 @@ lftcm2020:
     - jcommelin
     - PatrickMassot
   report-build-failures: false
-  
+
 rubiks-cube-group:
   description: |
     This project formalizes the Rubik's cube group as a product of corner orientation,
@@ -116,7 +116,7 @@ rubiks-cube-group:
     - kendfrey
   report-build-failures: false
 
-lean-liquid: 
+lean-liquid:
   description: |
     Liquid Tensor Experiment is a challenge by Peter Scholze
     to formalize parts of condensed mathematics,
@@ -128,19 +128,19 @@ lean-liquid:
 
 lean-gptf:
   description: |
-    Provides an interactive frontend to Lean GPT-f, 
-    a neural theorem prover which relies on a large Transformer language model to suggest tactics. 
-    It can prove nearly 50% of the remaining theorems in a held-out test set. 
+    Provides an interactive frontend to Lean GPT-f,
+    a neural theorem prover which relies on a large Transformer language model to suggest tactics.
+    It can prove nearly 50% of the remaining theorems in a held-out test set.
     See Jason Rute's [talk at Lean Together 2021](https://www.youtube.com/watch?v=eSXiClL4COw).
   organization: 'jesse-michael-han'
   maintainers:
     - jesse-michael-han
     - jasonrute
-    - tonywu95 
+    - tonywu95
     - edayers
     - spolu
   report-build-failures: false
-  
+
 lean-ga:
   description: |
     A formalization of parts of [Geometric Algebra](https://en.wikipedia.org/wiki/Geometric_algebra),
@@ -154,11 +154,11 @@ lean-ga:
 
 lean-social-choice:
   description: |
-    Social Choice Theory is a theoretical framework 
-    at the intersection of philosophy, political science, and 
-    welfare economics. It studies methods for aggregating 
-    individual preferences into collective social welfare functions. 
-    
+    Social Choice Theory is a theoretical framework
+    at the intersection of philosophy, political science, and
+    welfare economics. It studies methods for aggregating
+    individual preferences into collective social welfare functions.
+
     This is a library of noteworthy proofs from Social Choice Theory
     formalized in Lean.
   organization: 'asouther4'
@@ -171,7 +171,7 @@ flt-regular:
   description: |
     The goal of this project is to formalize Kummer's proof of Fermat's Last Theorem for regular
     prime exponents. This was a landmark 19th century result in algebraic number theory, proving the theorem
-    in many new cases at the time, but is quite different to the final proof of the full theorem, due to 
+    in many new cases at the time, but is quite different to the final proof of the full theorem, due to
     Wiles-Taylor. This project hopes to add more material on algebraic number theory and related
     topics to mathlib in addition to formalizing a version of Kummer's proof.
   organization: 'leanprover-community'
@@ -180,12 +180,12 @@ flt-regular:
     - riccardobrasca
     - ericrbg
     - CBirkbeck
-  report-build-failures: false 
-  
+  report-build-failures: false
+
 unit-fractions:
   description: |
     This project formalizes the main results of the preprint [On a density conjecture about unit fractions](https://arxiv.org/abs/2112.03726) in Lean.
-    One of these results says that any dense set of naturals contains distinct naturals whose reciprocals sum to 1. 
+    One of these results says that any dense set of naturals contains distinct naturals whose reciprocals sum to 1.
   organization: 'b-mehta'
   maintainers:
     - b-mehta
@@ -193,7 +193,7 @@ unit-fractions:
   report-build-failures: false
 
 lean-acl-pairs:
-  description: | 
+  description: |
     This project contains formalization of the relationship between so-called `acl`-pairs and valuation rings.
     If `K` and `F` are two fields, a pair of (group) morphisms `f g : Kˣ → F` is called an `acl`-pair provided that `f u * g v = f v * g u` whenever `u + v = 1` in `K`.
     The main result regarding such pairs shows that they essentially always arise from valuation theory, at least when `F` is a prime field (such as `ℚ` or `zmod p` where `p` is prime).
@@ -203,7 +203,7 @@ lean-acl-pairs:
   maintainers:
     - adamtopaz
   report-build-failures: false
-  
+
 con-nf:
   description: |
     A formalisation of the consistency of Quine's New Foundations axiom system, following [Randall Holmes' proof](https://randall-holmes.github.io/Nfproof/untangled.pdf). This is arguably the longest standing open question in set theory.
@@ -211,4 +211,25 @@ con-nf:
   maintainers:
     - YaelDillies
     - zeramorphic
+  report-build-failures: false
+
+sphere-eversion:
+  description: |
+    In this project we formalize the proof of existence of sphere eversions in Lean. More precisely, we aim to formalize the full h-principle for open and ample first order differential relations, and deduce existence of sphere eversions as a corollary.
+  organization: 'leanprover-community'
+  maintainers:
+    - PatrickMassot
+    - fpvandoorn
+    - ocfnash
+  report-build-failures: false
+
+flypitch:
+  description: |
+    The Flypitch project gives a formal proof of the independence of the continuum hypothesis from ZFC.
+    The continuum hypothesis states that there is no cardinality between the smallest infinite cardinal and the cardinality of the continuum.
+    This project also develops a library of first-order logic, set theory and forcing.
+  organization: 'flypitch'
+  maintainers:
+    - jesse-michael-han
+    - fpvandoorn
   report-build-failures: false
