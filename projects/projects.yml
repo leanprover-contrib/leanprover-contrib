@@ -226,7 +226,8 @@ sphere-eversion:
 flypitch:
   description: |
     The Flypitch project gives a formal proof of the independence of the continuum hypothesis from ZFC.
-    It develops a library of first-order logic, set theory and forcing.
+    The continuum hypothesis states that there is no cardinality between the smallest infinite cardinal and the cardinality of the continuum.
+    This project also develops a library of first-order logic, set theory and forcing.
   organization: 'flypitch'
   maintainers:
     - jesse-michael-han
