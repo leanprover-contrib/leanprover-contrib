@@ -107,9 +107,7 @@ project_root = root / 'projects'
 git_prefix = 'https://github.com/'
 
 projects = {}
-
-print('cloning mathlib')
-mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib')
+mathlib_repo: git.Repo = None
 
 def get_project_repo(project_name):
     if project_name == 'mathlib':
@@ -166,6 +164,10 @@ def write_version_history(hist):
         js_file.write('\nprojects = ' + str(project_out))
 
 def populate_projects():
+    global mathlib_repo
+    print('cloning mathlib')
+    mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib')
+
     with open(root/'projects'/'projects.yml', 'r') as project_file:
         projects_data = yaml.safe_load(project_file.read())
 
