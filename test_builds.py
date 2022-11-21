@@ -166,7 +166,7 @@ def write_version_history(hist):
 def populate_projects():
     global mathlib_repo
     print('cloning mathlib')
-    mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib')
+    mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib', no_checkout=True)
 
     with open(root/'projects'/'projects.yml', 'r') as project_file:
         projects_data = yaml.safe_load(project_file.read())
@@ -178,7 +178,8 @@ def populate_projects():
     print()
     for project_name in projects_data:
         project_org = projects_data[project_name]['organization']
-        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', project_root / project_name)
+        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', project_root / project_name, no_checkout=True)
+        repo.git.checkout(['HEAD', '--', 'leanpkg.toml'])
         versions = [vs for vs in [lean_version_from_remote_ref(ref.remote_head) for ref in repo.remotes[0].refs] if vs is not None]
         print(f'{project_name} has {len(versions)} version branches:')
         print(versions)
