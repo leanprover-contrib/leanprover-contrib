@@ -8,6 +8,7 @@ import toml
 import subprocess
 import github_reports
 import re
+import sys
 
 @dataclass
 class Project:
@@ -347,6 +348,11 @@ def collect_versions() -> Dict[Tuple[int], List[Project]]:
             out.setdefault(version, []).append(project)
     return out
 
+
+if len(sys.argv) > 1:
+    github_reports.setup(sys.argv[1])
+else:
+    github_reports.setup()
 
 populate_projects()
 

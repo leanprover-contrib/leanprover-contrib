@@ -1,10 +1,11 @@
 from github import Github
 import sys
 
-if len(sys.argv) > 1:
-    g = Github(sys.argv[1])
-else:
-    g = Github()
+g = None
+
+def setup(*args, **kwargs):
+    global g
+    g = Github(*args, **kwargs)
 
 def open_issue_on_failure(repo_name, title, body, tags):
     repo = g.get_repo(repo_name)
