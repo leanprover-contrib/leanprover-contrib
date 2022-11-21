@@ -9,6 +9,7 @@ import subprocess
 import github_reports
 import re
 import sys
+import argparse
 
 @dataclass
 class Project:
@@ -348,20 +349,26 @@ def collect_versions() -> Dict[Tuple[int], List[Project]]:
             out.setdefault(version, []).append(project)
     return out
 
+def arg_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--github_token', default=None)
+    return parser
 
-if len(sys.argv) > 1:
-    github_reports.setup(sys.argv[1])
-else:
-    github_reports.setup()
+if __name__ == '__main__':
+    args = arg_parser().parse_args()
+    if args.github_token:
+        github_reports.setup(args.github_token)
+    else:
+        github_reports.setup()
 
-populate_projects()
+    populate_projects()
 
-version_history = load_version_history()
+    version_history = load_version_history()
 
-for version in collect_versions():
-    test_on_lean_version(version, version_history)
+    for version in collect_versions():
+        test_on_lean_version(version, version_history)
 
-write_version_history(version_history)
+    write_version_history(version_history)
 
 # print(toposort_flatten({p : projects[p].dependencies for p in projects}))
 

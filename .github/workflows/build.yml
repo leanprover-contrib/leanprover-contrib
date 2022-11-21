@@ -37,7 +37,7 @@ jobs:
       - name: build projects
         run: |
           export OPENAI_API_KEY="${{ secrets.OPENAI_KEY }}" 
-          python test_builds.py ${{ secrets.LCB_TOKEN }}
+          python test_builds.py --github_token "${{ secrets.LCB_TOKEN }}"
 
       - name: push version history
         run: |
