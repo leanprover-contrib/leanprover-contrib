@@ -1,6 +1,6 @@
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Set, Mapping, Optional
+from typing import List, Set, Mapping, Optional, Tuple, Dict
 from toposort import toposort_flatten
 import yaml
 import git
@@ -12,7 +12,7 @@ import re
 @dataclass
 class Project:
     name: str
-    branches: List[List[int]]
+    branches: List[Tuple[int]]
     repo: git.Repo
     dependencies: Set[str]
     organization: str
@@ -23,7 +23,7 @@ class Project:
 @dataclass
 class Failure:
     project: str
-    version: List[int]
+    version: Tuple[int]
     is_new: bool
 
 class BuildFailure(Failure):
@@ -122,7 +122,7 @@ def lean_version_from_remote_ref(ref):
     m = re.fullmatch('lean-(\d+).(\d+).(\d+)', ref)
     if not m:
         return None
-    return [int(i) for i in m.groups()]
+    return tuple(int(i) for i in m.groups())
 
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
@@ -138,7 +138,7 @@ def write_version_history(hist):
     def vers_id(lv):
         return str(hash(lv) % 100000)
     def strip_prefix(lv):
-        return [int(i) for i in lv.split('.')]
+        return tuple(int(i) for i in lv.split('.'))
     def not_only_mathlib(lv):
         lvr = lean_version_from_remote_ref(lv)
         print(lvr)
@@ -337,13 +337,11 @@ def test_on_lean_version(version, version_history):
         print(failures[f])
         failures[f].report_issue(version_history, mathlib_prev)
 
-# annoying that lists are unhashable :(
-def collect_versions():
-    versions = [version for project_name in projects for version in projects[project_name].branches]
-    out = []
-    for l in versions:
-        if l not in out:
-            out.append(l)
+def collect_versions() -> Dict[Tuple[int], List[Project]]:
+    out = {}
+    for project_name, project in projects.items():
+        for version in project.branches:
+            out.setdefault(version, []).append(project)
     return out
 
 
