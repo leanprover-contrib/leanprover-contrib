@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.version }}
-          path: version_history/*
+          path: version_history.yml
 
   collate:
     name: Collate and deploy results
