@@ -10,6 +10,7 @@ import github_reports
 import re
 import sys
 import argparse
+import json
 
 @dataclass
 class Project:
@@ -42,13 +43,12 @@ class BuildFailure(Failure):
             s += f'\n  This may be because of a transitive failure in {self.find_trans_fail().project}'
         return s
 
-    def report_issue(self, version_history, mathlib_prev = None):
+    def report_issue(self, project_statuses, mathlib_prev = None):
         if self.is_new and projects[self.project].report_failure:
-            version_key = remote_ref_from_lean_version(self.version)
             ppversion = '.'.join(str(s) for s in self.version)
             project = projects[self.project]
             branch_url = f'https://github.com/{project.organization}/{self.project}/tree/lean-{ppversion}'
-            mathlib_curr = version_history[version_key]['mathlib']['latest_test'] if 'mathlib' in version_history[version_key] else None
+            mathlib_curr = project_statuses['mathlib']['latest_test'] if 'mathlib' in project_statuses else None
             # if mathlib_prev is not None and mathlib_prev != :
             git_diff_url = f'https://github.com/leanprover-community/mathlib/compare/{mathlib_prev}...{mathlib_curr}' \
                 if mathlib_prev is not None and mathlib_curr is not None and mathlib_prev != mathlib_curr \
@@ -71,7 +71,7 @@ Your project's [lean-{ppversion}]({branch_url}) branch has failed to build with 
                 f'Build failure on automatic dependency update on `lean-{ppversion}`',
                 s,
                 project.owners)
-            version_history[version_key][self.project]['issue'] = issue
+            project_statuses[self.project]['issue'] = issue
 
 def format_project_link(project_name):
     org = projects[project_name].organization
@@ -85,7 +85,7 @@ class DependencyFailure(Failure):
     def __repr__(self):
         return f'{self.project} was not built on version {self.version} because some of its dependencies do not have a corresponding version: {self.dependencies}'
 
-    def report_issue(self, version_history, mathlib_prev = None):
+    def report_issue(self, project_statuses, mathlib_prev = None):
         if self.is_new and projects[self.project].report_failure:
             ppversion = '.'.join(str(s) for s in self.version)
             deplist = '\n'.join('* {format_project_link(d)}' for d in self.dependencies)
@@ -100,7 +100,7 @@ Your project has a `lean-{ppversion}` branch, but some of its dependencies do no
                 f'Dependency error on `lean-{ppversion}`',
                 s,
                 project.owners)
-            version_history[remote_ref_from_lean_version(self.version)][self.project]['issue'] = issue
+            project_statuses[self.project]['issue'] = issue
 
 
 root = Path('.').absolute()
@@ -134,7 +134,7 @@ def load_version_history():
         return {} if dic is None else dic
 
 
-def write_version_history(hist):
+def write_version_history_js(hist):
     def vers_id(lv):
         return str(hash(lv) % 100000)
     def strip_prefix(lv):
@@ -143,8 +143,6 @@ def write_version_history(hist):
         lvr = lean_version_from_remote_ref(lv)
         print(lvr)
         return any(p for p in projects if p != 'mathlib' and projects[p].display and lvr in projects[p].branches)
-    with open(root / 'version_history.yml', 'w') as yaml_file:
-        yaml.dump(hist, yaml_file)
     hist2 = [lv for lv in hist if not_only_mathlib(lv)]
     print(hist2)
     project_out = []
@@ -229,47 +227,38 @@ def get_git_sha(version, project_name):
     key = remote_ref_from_lean_version(version)
     return get_project_repo(project_name).remotes[0].refs.__getattr__(key).object.hexsha
 
-def add_success_to_version_history(version, project_name, version_history):
-    key = remote_ref_from_lean_version(version)
+def add_success_to_project_statuses(version, project_name, project_statuses):
     sha = get_git_sha(version, project_name)
-    if key not in version_history:
-        version_history[key] = {project_name:{'latest_success':sha, 'latest_test':sha, 'success':True}}
-    else:
-        if project_name in version_history[key] and 'issue' in version_history[key][project_name]:
-            github_reports.resolve_issue(f'{projects[project_name].organization}/{project_name}', version_history[key][project_name]['issue'])
-            del version_history[key][project_name]['issue']
-        version_history[key][project_name] = {'latest_success':sha, 'latest_test':sha, 'success':True}
+    if project_name in project_statuses and 'issue' in project_statuses[project_name]:
+        github_reports.resolve_issue(f'{projects[project_name].organization}/{project_name}', project_statuses[project_name]['issue'])
+        del project_statuses[project_name]['issue']
+    project_statuses[project_name] = {'latest_success':sha, 'latest_test':sha, 'success':True}
 
-def add_failure_to_version_history(version, project_name, version_history):
-    key = remote_ref_from_lean_version(version)
+def add_failure_to_project_statuses(version, project_name, project_statuses):
     sha = get_git_sha(version, project_name)
-    if key not in version_history:
-        version_history[key] = {project_name:{'latest_test':sha, 'success':False}}
-    elif project_name in version_history[key]:
-        version_history[key][project_name]['latest_test'] = sha
-        version_history[key][project_name]['success'] = False
+    if project_name in project_statuses:
+        project_statuses[project_name]['latest_test'] = sha
+        project_statuses[project_name]['success'] = False
     else:
-        version_history[key][project_name] = {'latest_test':sha, 'success':False}
+        project_statuses[project_name] = {'latest_test':sha, 'success':False}
 
-def failing_test(version, project_name, version_history, failures, new_failure):
+def failing_test(version, project_name, project_statuses, failures, new_failure):
     failures[project_name] = new_failure
-    add_failure_to_version_history(version, project_name, version_history)
+    add_failure_to_project_statuses(version, project_name, project_statuses)
 
-def previous_run_exists_and_failed(version, project_name, version_history):
-    key = remote_ref_from_lean_version(version)
-    return key in version_history \
-      and project_name in version_history[key] \
-      and not version_history[key][project_name]['success']
+def previous_run_exists_and_failed(version, project_name, project_statuses):
+    return project_name in project_statuses \
+      and not project_statuses[project_name]['success']
 
 
-def test_project_on_version(version, project_name, failures, version_history):
+def test_project_on_version(version, project_name, failures, project_statuses):
     print(f'testing {project_name} on version {version}')
     project = projects[project_name]
 
     failure = next((failures[dep] for dep in project.dependencies if dep in failures), None)
     if failure is not None:
-        is_new = not previous_run_exists_and_failed(version, project_name, version_history)
-        failing_test(version, project_name, version_history, failures, BuildFailure(project_name, version, is_new, failure))
+        is_new = not previous_run_exists_and_failed(version, project_name, project_statuses)
+        failing_test(version, project_name, project_statuses, failures, BuildFailure(project_name, version, is_new, failure))
         return
     repo = project.repo
     repo.head.reset(index=True, working_tree=True)
@@ -280,36 +269,34 @@ def test_project_on_version(version, project_name, failures, version_history):
         leanpkg_add_local_dependency(project_name, dep)
 
     if leanpkg_build(project_name):
-        add_success_to_version_history(version, project_name, version_history)
+        add_success_to_project_statuses(version, project_name, project_statuses)
     else:
-        is_new = not previous_run_exists_and_failed(version, project_name, version_history)
-        failing_test(version, project_name, version_history, failures, BuildFailure(project_name, version, is_new, None))
+        is_new = not previous_run_exists_and_failed(version, project_name, project_statuses)
+        failing_test(version, project_name, project_statuses, failures, BuildFailure(project_name, version, is_new, None))
 
-def project_has_changes_on_version(version, project_name, version_history):
-    key = remote_ref_from_lean_version(version)
-    if key not in version_history or project_name not in version_history[key]:
+def project_has_changes_on_version(version, project_name, project_statuses):
+    if project_name not in project_statuses:
         return True
-    latest_test = version_history[key][project_name]['latest_test']
+    latest_test = project_statuses[project_name]['latest_test']
     curr_sha = get_git_sha(version, project_name)
     return latest_test != curr_sha
 
-def changes_on_version(version, project_names, version_history):
-    return any(project_has_changes_on_version(version, project_name, version_history) for project_name in project_names)
+def changes_on_version(version, project_names, project_statuses):
+    return any(project_has_changes_on_version(version, project_name, project_statuses) for project_name in project_names)
 
-def test_on_lean_version(version, version_history):
+def test_on_lean_version(version, project_statuses):
     print(f'\nRunning tests on Lean version {version}')
-    key = remote_ref_from_lean_version(version)
-    mathlib_prev = version_history[key]['mathlib']['latest_test'] \
-        if key in version_history and 'mathlib' in version_history[key] else None
+    mathlib_prev = project_statuses['mathlib']['latest_test'] \
+        if 'mathlib' in project_statuses else None
     version_projects = [p for p in projects if version in projects[p].branches]
     print(f'version projects: {version_projects}')
 
-    if not changes_on_version(version, version_projects, version_history):
+    if not changes_on_version(version, version_projects, project_statuses):
         print(f'no projects have changed on version {version} since the last run.\n')
         return
 
     if version in projects['mathlib'].branches:
-        add_success_to_version_history(version, 'mathlib', version_history)
+        add_success_to_project_statuses(version, 'mathlib', project_statuses)
 
     ordered_projects = toposort_flatten({p:projects[p].dependencies for p in version_projects})
     # if 'mathlib' in ordered_projects:
@@ -324,8 +311,8 @@ def test_on_lean_version(version, version_history):
             print(f'removing {p}')
             del ordered_projects[i]
             if p in version_projects:
-                is_new = not previous_run_exists_and_failed(version, p, version_history)
-                failing_test(version, p, version_history, failures, DependencyFailure(p, version, is_new, missing_deps))
+                is_new = not previous_run_exists_and_failed(version, p, project_statuses)
+                failing_test(version, p, project_statuses, failures, DependencyFailure(p, version, is_new, missing_deps))
         else:
             i += 1
 
@@ -334,42 +321,88 @@ def test_on_lean_version(version, version_history):
         if 'mathlib' in ordered_projects:
             update_mathlib_to_version(version)
         for project_name in [project_name for project_name in ordered_projects if project_name != 'mathlib']:
-            test_project_on_version(version, project_name, failures, version_history)
+            test_project_on_version(version, project_name, failures, project_statuses)
 
     if len(failures) > 0:
         print(f'\n{len(failures)} failures:')
     for f in failures:
         print(failures[f])
-        failures[f].report_issue(version_history, mathlib_prev)
+        failures[f].report_issue(project_statuses, mathlib_prev)
 
-def collect_versions() -> Dict[Tuple[int], List[Project]]:
-    out = {}
-    for project_name, project in projects.items():
+def collect_versions(version_history) -> Dict[Tuple[int], List[Project]]:
+    versions = {}
+    for name, project in projects.items():
         for version in project.branches:
-            out.setdefault(version, []).append(project)
-    return out
+            key = remote_ref_from_lean_version(version)
+            if key not in version_history or project_has_changes_on_version(version, name, version_history[key]):
+                versions.setdefault(version, []).append(project)
+    return versions
 
 def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--github_token', default=None)
+    subparsers = parser.add_subparsers(title='subcommands',
+                                   description='valid subcommands',
+                                   dest='subparser')
+    subparsers.add_parser('write_js', help="Generate the js file from the yaml")
+    concat_parser = subparsers.add_parser('concat_outputs',
+        help="concatenate yaml files generated by the --version flag")
+    concat_parser.add_argument('files', nargs='*')
+
+    load_parser = subparsers.add_parser('load_versions',
+        help="generate a json file listing all available versions")
+    load_parser.add_argument('json_output')
+    parser.add_argument('--version', default=None,
+        help="Check third party packages for only a single version")
     return parser
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     args = arg_parser().parse_args()
     if args.github_token:
         github_reports.setup(args.github_token)
     else:
         github_reports.setup()
 
-    populate_projects()
-
     version_history = load_version_history()
 
-    for version in collect_versions():
-        test_on_lean_version(version, version_history)
+    if args.subparser == 'concat_outputs':
+        for f in args.files:
+            with open(f, 'r') as yaml_file:
+                data = yaml.safe_load(yaml_file.read())
+            for ver, ver_data in data.items():
+                for proj, proj_data in ver_data.items():
+                    version_history.setdefault(ver, {}).setdefault(proj, {}).update(proj_data)
+        with open(root / 'version_history.yml', 'w') as yaml_file:
+            yaml.dump(version_history, yaml_file)
+        raise SystemExit()
 
-    write_version_history(version_history)
+    if args.subparser == 'write_js':
+        write_version_history_js(version_history)
+        raise SystemExit()
 
-# print(toposort_flatten({p : projects[p].dependencies for p in projects}))
+    populate_projects()
+    if args.subparser == 'load_versions':
+        # stdout is impractical because all our subprocesses write to it too
+        with open(args.json_output, 'w') as f:
+            json.dump([
+                remote_ref_from_lean_version(v) for v in collect_versions(version_history)], f)
+        raise SystemExit()
 
-# print(projects)
+    if args.version:
+        key = args.version
+        version = lean_version_from_remote_ref(args.version)
+        project_statuses = version_history.setdefault(key, {})
+        test_on_lean_version(version, project_statuses)
+        with open(root / f'version_history.yml', 'w') as yaml_file:
+            yaml.dump({key: project_statuses}, yaml_file)
+        raise SystemExit()
+
+    for version in collect_versions(version_history):
+        key = remote_ref_from_lean_version(version)
+        project_statuses = version_history.setdefault(key, {})
+        test_on_lean_version(version, project_statuses)
+
+    with open(root / 'version_history.yml', 'w') as yaml_file:
+        yaml.dump(version_history, yaml_file)
+    write_version_history_js(version_history)
