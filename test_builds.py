@@ -1,6 +1,6 @@
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Set, Mapping, Optional
+from typing import List, Set, Mapping, Optional, Tuple, Dict
 from toposort import toposort_flatten
 import yaml
 import git
@@ -8,11 +8,13 @@ import toml
 import subprocess
 import github_reports
 import re
+import sys
+import argparse
 
 @dataclass
 class Project:
     name: str
-    branches: List[List[int]]
+    branches: List[Tuple[int]]
     repo: git.Repo
     dependencies: Set[str]
     organization: str
@@ -23,7 +25,7 @@ class Project:
 @dataclass
 class Failure:
     project: str
-    version: List[int]
+    version: Tuple[int]
     is_new: bool
 
 class BuildFailure(Failure):
@@ -107,9 +109,7 @@ project_root = root / 'projects'
 git_prefix = 'https://github.com/'
 
 projects = {}
-
-print('cloning mathlib')
-mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib')
+mathlib_repo: git.Repo = None
 
 def get_project_repo(project_name):
     if project_name == 'mathlib':
@@ -122,7 +122,7 @@ def lean_version_from_remote_ref(ref):
     m = re.fullmatch('lean-(\d+).(\d+).(\d+)', ref)
     if not m:
         return None
-    return [int(i) for i in m.groups()]
+    return tuple(int(i) for i in m.groups())
 
 def remote_ref_from_lean_version(version):
     return 'lean-{0}.{1}.{2}'.format(*version)
@@ -138,7 +138,7 @@ def write_version_history(hist):
     def vers_id(lv):
         return str(hash(lv) % 100000)
     def strip_prefix(lv):
-        return [int(i) for i in lv.split('.')]
+        return tuple(int(i) for i in lv.split('.'))
     def not_only_mathlib(lv):
         lvr = lean_version_from_remote_ref(lv)
         print(lvr)
@@ -166,6 +166,10 @@ def write_version_history(hist):
         js_file.write('\nprojects = ' + str(project_out))
 
 def populate_projects():
+    global mathlib_repo
+    print('cloning mathlib')
+    mathlib_repo = git.Repo.clone_from(f'{git_prefix}leanprover-community/mathlib', project_root / 'mathlib', no_checkout=True)
+
     with open(root/'projects'/'projects.yml', 'r') as project_file:
         projects_data = yaml.safe_load(project_file.read())
 
@@ -176,7 +180,8 @@ def populate_projects():
     print()
     for project_name in projects_data:
         project_org = projects_data[project_name]['organization']
-        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', project_root / project_name)
+        repo = git.Repo.clone_from(f'{git_prefix}{project_org}/{project_name}', project_root / project_name, no_checkout=True)
+        repo.git.checkout(['HEAD', '--', 'leanpkg.toml'])
         versions = [vs for vs in [lean_version_from_remote_ref(ref.remote_head) for ref in repo.remotes[0].refs] if vs is not None]
         print(f'{project_name} has {len(versions)} version branches:')
         print(versions)
@@ -337,24 +342,33 @@ def test_on_lean_version(version, version_history):
         print(failures[f])
         failures[f].report_issue(version_history, mathlib_prev)
 
-# annoying that lists are unhashable :(
-def collect_versions():
-    versions = [version for project_name in projects for version in projects[project_name].branches]
-    out = []
-    for l in versions:
-        if l not in out:
-            out.append(l)
+def collect_versions() -> Dict[Tuple[int], List[Project]]:
+    out = {}
+    for project_name, project in projects.items():
+        for version in project.branches:
+            out.setdefault(version, []).append(project)
     return out
 
+def arg_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--github_token', default=None)
+    return parser
 
-populate_projects()
+if __name__ == '__main__':
+    args = arg_parser().parse_args()
+    if args.github_token:
+        github_reports.setup(args.github_token)
+    else:
+        github_reports.setup()
 
-version_history = load_version_history()
+    populate_projects()
 
-for version in collect_versions():
-    test_on_lean_version(version, version_history)
+    version_history = load_version_history()
 
-write_version_history(version_history)
+    for version in collect_versions():
+        test_on_lean_version(version, version_history)
+
+    write_version_history(version_history)
 
 # print(toposort_flatten({p : projects[p].dependencies for p in projects}))
 
