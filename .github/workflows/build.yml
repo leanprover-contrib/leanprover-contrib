@@ -39,6 +39,7 @@ jobs:
     name: Build for ${{matrix.version}}
     runs-on: ubuntu-latest
     needs: collect_versions
+    if: toJson(fromJson(needs.collect_versions.outputs.matrix)) != '[]'
     strategy:
       matrix:
         version: ${{fromJson(needs.collect_versions.outputs.matrix)}}
