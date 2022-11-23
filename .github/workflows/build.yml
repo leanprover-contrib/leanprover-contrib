@@ -81,6 +81,7 @@ jobs:
     name: Collate and deploy results
     runs-on: ubuntu-latest
     needs: build_versions
+    if: always()
     steps:
       - uses: actions/checkout@v2
       - name: install python
