@@ -105,6 +105,7 @@ jobs:
 
       - name: Merge files
         run: |
+          shopt null_glob
           python test_builds.py concat_outputs version_history/*/*.yml
           cat version_history.yml
 
