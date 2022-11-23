@@ -377,11 +377,12 @@ if __name__ == "__main__":
             yaml.dump(version_history, yaml_file)
         raise SystemExit()
 
+    populate_projects()
+
     if args.subparser == 'write_js':
         write_version_history_js(version_history)
         raise SystemExit()
 
-    populate_projects()
     if args.subparser == 'load_versions':
         # stdout is impractical because all our subprocesses write to it too
         with open(args.json_output, 'w') as f:
