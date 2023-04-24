@@ -364,7 +364,7 @@ if __name__ == "__main__":
         try:
             print(f"Authenticated with github as {github_reports.g.get_user().login}")
         except Exception:
-            print("Token was of length {len(args.github_token)}")
+            print(f"Token was of length {len(args.github_token)}")
             raise
     else:
         github_reports.setup()
@@ -395,8 +395,6 @@ if __name__ == "__main__":
             json.dump([
                 remote_ref_from_lean_version(v) for v in collect_versions(version_history)], f)
         raise SystemExit()
-
-    raise SystemExit("Remove me")
 
     if args.version:
         key = args.version
