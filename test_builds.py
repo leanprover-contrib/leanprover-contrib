@@ -359,15 +359,12 @@ def arg_parser():
 
 if __name__ == "__main__":
     args = arg_parser().parse_args()
-    for i in range(10):
-        print(f"This is a debug line, number {i}, to check that github is not swallowing output")
     if args.github_token is not None:
         github_reports.setup(args.github_token)
-        print(f"Authenticated with github as {github_reports.g.get_user()}")
+        print(f"Authenticated with github as {github_reports.g.get_user().login}")
     else:
         github_reports.setup()
         print(f"No github token found")
-    print("End of debug content")
 
     version_history = load_version_history()
 
