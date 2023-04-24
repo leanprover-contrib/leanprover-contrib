@@ -395,6 +395,8 @@ if __name__ == "__main__":
                 remote_ref_from_lean_version(v) for v in collect_versions(version_history)], f)
         raise SystemExit()
 
+    raise SystemExit("Remove me")
+
     if args.version:
         key = args.version
         version = lean_version_from_remote_ref(args.version)
@@ -403,8 +405,6 @@ if __name__ == "__main__":
         with open(root / f'version_history.yml', 'w') as yaml_file:
             yaml.dump({key: project_statuses}, yaml_file)
         raise SystemExit()
-    
-    raise SystemExit("Remove me")
 
     for version in collect_versions(version_history):
         key = remote_ref_from_lean_version(version)
