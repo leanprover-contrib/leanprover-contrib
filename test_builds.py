@@ -361,6 +361,7 @@ if __name__ == "__main__":
     args = arg_parser().parse_args()
     if args.github_token:
         github_reports.setup(args.github_token)
+        print(f"Authenticated with github as {github_reports.g.get_user()}")
     else:
         github_reports.setup()
 
