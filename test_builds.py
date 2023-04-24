@@ -359,12 +359,15 @@ def arg_parser():
 
 if __name__ == "__main__":
     args = arg_parser().parse_args()
+    for i in range(10):
+        print(f"This is a debug line, number {i}, to check that github is not swallowing output")
     if args.github_token is not None:
         github_reports.setup(args.github_token)
         print(f"Authenticated with github as {github_reports.g.get_user()}")
     else:
         github_reports.setup()
         print(f"No github token found")
+    print("End of debug content")
 
     version_history = load_version_history()
 
@@ -400,6 +403,8 @@ if __name__ == "__main__":
         with open(root / f'version_history.yml', 'w') as yaml_file:
             yaml.dump({key: project_statuses}, yaml_file)
         raise SystemExit()
+    
+    raise SystemExit("Remove me")
 
     for version in collect_versions(version_history):
         key = remote_ref_from_lean_version(version)
