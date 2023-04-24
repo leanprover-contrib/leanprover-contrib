@@ -41,6 +41,7 @@ jobs:
     needs: collect_versions
     if: toJson(fromJson(needs.collect_versions.outputs.matrix)) != '[]'
     strategy:
+      fail-fast: false
       matrix:
         version: ${{fromJson(needs.collect_versions.outputs.matrix)}}
     steps:
