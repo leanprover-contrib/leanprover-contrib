@@ -361,7 +361,11 @@ if __name__ == "__main__":
     args = arg_parser().parse_args()
     if args.github_token is not None:
         github_reports.setup(args.github_token)
-        print(f"Authenticated with github as {github_reports.g.get_user().login}")
+        try:
+            print(f"Authenticated with github as {github_reports.g.get_user().login}")
+        except Exception:
+            print("Token was of length {len(args.github_token)}")
+            raise
     else:
         github_reports.setup()
         print(f"No github token found")
