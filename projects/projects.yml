@@ -233,3 +233,12 @@ flypitch:
     - jesse-michael-han
     - fpvandoorn
   report-build-failures: false
+  
+grammars:
+  description: |
+    The aim of the project is to formalize the Chomsky hierarchy.
+    So far, the main focus has been to prove closure properties of type-0 grammars.
+  organization: 'madvorak'
+  maintainers:
+    - madvorak
+  report-build-failures: true
