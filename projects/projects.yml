@@ -234,7 +234,7 @@ flypitch:
     - fpvandoorn
   report-build-failures: false
   
-  LeanChemicalTheories:
+LeanChemicalTheories:
   description: |
     A collection of formalized theories in chemical sciences and engineering including Langmuir and BET theories of adsorption. The work also extends 
     to build a thermodynamic system in Lean and uses it to formalize gas law relationships like Boyle's Law and equations of motion underlying Newtonian mechanics. 
@@ -242,5 +242,3 @@ flypitch:
   maintainers:
     - ATOMSLab
   report-build-failures: false
-  
-  
