@@ -242,4 +242,14 @@ grammars:
   organization: 'madvorak'
   maintainers:
     - madvorak
-  report-build-failures: true
+  report-build-failures: 
+
+lean-matrix-cookbook:
+  description: |
+    This project aims to provide the lemmas in [The Matrix Cookbook](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf) as proofs in the Lean theorem prover.
+    Ideally, every proof in this repository should be a reference to a single lemma in Mathlib; this can be used as an index against (and progress report for) mathlib for standard matrix results.
+  organization: 'eric-wieser'
+  maintainers:
+    - eric-wieser
+  report-build-failures: false
+
