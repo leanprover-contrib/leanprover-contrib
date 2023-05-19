@@ -237,7 +237,8 @@ flypitch:
 grammars:
   description: |
     The aim of the project is to formalize the Chomsky hierarchy.
-    So far, the main focus has been to prove closure properties of type-0 grammars.
+    So far, the main focus has been to prove closure properties of general (type 0) grammars.
+    We also have some results about context-free (type 2) grammars.
   organization: 'madvorak'
   maintainers:
     - madvorak
