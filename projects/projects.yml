@@ -242,7 +242,7 @@ grammars:
   organization: 'madvorak'
   maintainers:
     - madvorak
-  report-build-failures: 
+  report-build-failures: true
 
 lean-matrix-cookbook:
   description: |
