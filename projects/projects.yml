@@ -233,7 +233,7 @@ flypitch:
     - jesse-michael-han
     - fpvandoorn
   report-build-failures: false
-  
+
 LeanChemicalTheories:
   description: |
     A collection of formalized theories in chemical sciences and engineering including Langmuir and BET theories of adsorption. The work also extends 
@@ -242,3 +242,13 @@ LeanChemicalTheories:
   maintainers:
     - ATOMSLab
   report-build-failures: false
+
+grammars:
+  description: |
+    The aim of the project is to formalize the Chomsky hierarchy.
+    So far, the main focus has been to prove closure properties of general (type 0) grammars.
+    We also have some results about context-free (type 2) grammars.
+  organization: 'madvorak'
+  maintainers:
+    - madvorak
+  report-build-failures: true

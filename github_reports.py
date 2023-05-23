@@ -10,7 +10,10 @@ def setup(*args, **kwargs):
 def open_issue_on_failure(repo_name, title, body, tags):
     repo = g.get_repo(repo_name)
     body += '\n\n' + ' '.join(['@'+tag for tag in tags])
-    return repo.create_issue(title, body).number
+    try:
+        return repo.create_issue(title, body).number
+    except Exception:
+        print(f"while creating issue for {repo}")
 
 def resolve_issue(repo_name, issue_num):
     repo = g.get_repo(repo_name)

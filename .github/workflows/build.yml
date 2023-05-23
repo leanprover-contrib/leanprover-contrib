@@ -14,10 +14,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: install python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
           cache: 'pip'
@@ -41,10 +41,11 @@ jobs:
     needs: collect_versions
     if: toJson(fromJson(needs.collect_versions.outputs.matrix)) != '[]'
     strategy:
+      fail-fast: false
       matrix:
         version: ${{fromJson(needs.collect_versions.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: install elan
         run: |
@@ -53,7 +54,7 @@ jobs:
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
       - name: install python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
           cache: 'pip'
@@ -83,9 +84,9 @@ jobs:
     needs: build_versions
     if: always()
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: install python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
           cache: 'pip'
