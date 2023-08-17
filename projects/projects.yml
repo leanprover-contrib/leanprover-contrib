@@ -1,0 +1,255 @@
+super:
+  description: |
+    Version one of a small superposition prover
+    written in Lean. This repository introduces
+    a tactic `super` which attempts to solve
+    problems in first order logic, possibly
+    given a list of extra hypotheses.
+
+    This version is not compatible with community
+    releases of Lean.
+  organization: 'leanprover'
+  maintainers:
+    - gebner
+
+super2:
+  description: |
+    Version two of a small superposition prover
+    written in Lean. This repository introduces
+    a tactic `super` which attempts to solve
+    problems in first order logic, possibly
+    given a list of extra hypotheses.
+  organization: 'gebner'
+  maintainers:
+    - gebner
+
+mathematica:
+  description: |
+    Connects Lean to the computer algebra system
+    Mathematica. This project offers a
+    bi-directional translation between the two
+    systems. From within Lean, you can evaluate
+    Mathematica commands, possibly including
+    translated Lean expressions, and process
+    the results. From Mathematica, you can access
+    a Lean environment.
+
+    Examples of calling Mathematica from Lean
+    can be found at
+    [robertylewis/mathematica_examples](https://github.com/robertylewis/mathematica_examples),
+    and examples in the other direction at
+    [minchaowu/mm-lean](https://github.com/minchaowu/mm-lean).
+    These repositories are not in the contrib list
+    because they depend on Mathematica, which
+    is proprietary software.
+    See also our [project webpage](http://robertylewis.com/leanmm/index.html)
+    with a link to our paper about this project.
+  organization: 'robertylewis'
+  maintainers:
+    - robertylewis
+    - minchaowu
+  report-build-failures: false
+
+topos:
+  description: |
+    This repository contains formal verifications of results in Topos Theory, drawing from "Sheaves in Geometry and Logic" and "Sketches of an Elephant". It currently includes a range of constructions and theorems about both Grothendieck topoi and elementary toposes.
+  organization: 'b-mehta'
+  maintainers:
+    - b-mehta
+  report-build-failures: false
+
+lean-perfectoid-spaces:
+  description: |
+    Perfectoid spaces are sophisticated objects in arithmetic geometry
+    introduced by Peter Scholze in 2012. We formalised enough definitions
+    and theorems in topology, algebra and geometry to define perfectoid
+    spaces in Lean. See also our
+    [project webpage](https://leanprover-community.github.io/lean-perfectoid-spaces/)
+    and [paper](https://arxiv.org/abs/1910.12320).
+  organization: 'leanprover-community'
+  maintainers:
+    - kbuzzard
+    - jcommelin
+    - PatrickMassot
+  report-build-failures: false
+
+sudoku:
+  description: |
+    This is an implementation of sudoku, written in Lean. When you open a
+    level in VS Code, a sudoku board is displayed in the goal view. You can
+    put numbers (and also pencil marks) on the board by adding hypotheses,
+    but you have to prove that the placement of the number follows logically
+    from what is already on the board! There are some tactics to help you with
+    this, and you can also prove theorems to build up your personal library of
+    sudoku theory.
+  organization: 'TwoFx'
+  maintainers:
+    - TwoFx
+  report-build-failures: false
+
+lftcm2020:
+  description: |
+    This repository contains tutorials about Lean and mathlib that were developed
+    for the workshop [Lean for the Curious Mathematician](https://leanprover-community.github.io/lftcm2020/),
+    held in July 2020. The tutorials range from introductory lessons on numbers,
+    logic, and sets to advanced lessons on category theory and manifolds.
+    In addition to the materials found in this repository, we recommend watching
+    the [videos](https://www.youtube.com/playlist?list=PLlF-CfQhukNlxexiNJErGJd2dte_J1t1N)
+    of the tutorials and lectures from the workshop.
+  organization: 'leanprover-community'
+  maintainers:
+    - jcommelin
+    - PatrickMassot
+  report-build-failures: false
+
+rubiks-cube-group:
+  description: |
+    This project formalizes the Rubik's cube group as a product of corner orientation,
+    corner permutation, edge orientation, and edge permutation.
+
+    The solvable subgroup is defined as the the set of positions where both orientations sum
+    to 0 and the permutations have the same sign.
+
+    This project includes a widget to visualize elements of the group as physical puzzle states.
+  organization: 'kendfrey'
+  maintainers:
+    - kendfrey
+  report-build-failures: false
+
+lean-liquid:
+  description: |
+    Liquid Tensor Experiment is a challenge by Peter Scholze
+    to formalize parts of condensed mathematics,
+    culminating in the main theorem of liquid modules.
+  organization: 'leanprover-community'
+  maintainers:
+    - jcommelin
+  report-build-failures: false
+
+lean-gptf:
+  description: |
+    Provides an interactive frontend to Lean GPT-f,
+    a neural theorem prover which relies on a large Transformer language model to suggest tactics.
+    It can prove nearly 50% of the remaining theorems in a held-out test set.
+    See Jason Rute's [talk at Lean Together 2021](https://www.youtube.com/watch?v=eSXiClL4COw).
+  organization: 'jesse-michael-han'
+  maintainers:
+    - jesse-michael-han
+    - jasonrute
+    - tonywu95
+    - edayers
+    - spolu
+  report-build-failures: false
+
+lean-ga:
+  description: |
+    A formalization of parts of [Geometric Algebra](https://en.wikipedia.org/wiki/Geometric_algebra),
+    and the source from which most of the [`clifford_algebra`](https://leanprover-community.github.io/mathlib_docs/find/clifford_algebra)
+    library graduated to mathlib.
+  organization: 'pygae'
+  maintainers:
+    - eric-wieser
+    - utensil
+  report-build-failures: false
+
+lean-social-choice:
+  description: |
+    Social Choice Theory is a theoretical framework
+    at the intersection of philosophy, political science, and
+    welfare economics. It studies methods for aggregating
+    individual preferences into collective social welfare functions.
+
+    This is a library of noteworthy proofs from Social Choice Theory
+    formalized in Lean.
+  organization: 'asouther4'
+  maintainers:
+    - asouther4
+    - benjamindavidson
+  report-build-failures: false
+
+flt-regular:
+  description: |
+    The goal of this project is to formalize Kummer's proof of Fermat's Last Theorem for regular
+    prime exponents. This was a landmark 19th century result in algebraic number theory, proving the theorem
+    in many new cases at the time, but is quite different to the final proof of the full theorem, due to
+    Wiles-Taylor. This project hopes to add more material on algebraic number theory and related
+    topics to mathlib in addition to formalizing a version of Kummer's proof.
+  organization: 'leanprover-community'
+  maintainers:
+    - alexjbest
+    - riccardobrasca
+    - ericrbg
+    - CBirkbeck
+  report-build-failures: false
+
+unit-fractions:
+  description: |
+    This project formalizes the main results of the preprint [On a density conjecture about unit fractions](https://arxiv.org/abs/2112.03726) in Lean.
+    One of these results says that any dense set of naturals contains distinct naturals whose reciprocals sum to 1.
+  organization: 'b-mehta'
+  maintainers:
+    - b-mehta
+    - TFBloom
+  report-build-failures: false
+
+lean-acl-pairs:
+  description: |
+    This project contains formalization of the relationship between so-called `acl`-pairs and valuation rings.
+    If `K` and `F` are two fields, a pair of (group) morphisms `f g : Kˣ → F` is called an `acl`-pair provided that `f u * g v = f v * g u` whenever `u + v = 1` in `K`.
+    The main result regarding such pairs shows that they essentially always arise from valuation theory, at least when `F` is a prime field (such as `ℚ` or `zmod p` where `p` is prime).
+    The proofs formalized in this repository are based on ideas of Bogomolov-Tschinkel, Efrat, Koenigsmann, and the author.
+    This repository also formalizes some results about rigid elements and valuation which are due to Arason-Elman-Jacob.
+  organization: 'adamtopaz'
+  maintainers:
+    - adamtopaz
+  report-build-failures: false
+
+con-nf:
+  description: |
+    A formalisation of the consistency of Quine's New Foundations axiom system, following [Randall Holmes' proof](https://randall-holmes.github.io/Nfproof/untangled.pdf). This is arguably the longest standing open question in set theory.
+  organization: 'leanprover-community'
+  maintainers:
+    - YaelDillies
+    - zeramorphic
+  report-build-failures: false
+
+sphere-eversion:
+  description: |
+    In this project we formalize the proof of existence of sphere eversions in Lean. More precisely, we aim to formalize the full h-principle for open and ample first order differential relations, and deduce existence of sphere eversions as a corollary.
+  organization: 'leanprover-community'
+  maintainers:
+    - PatrickMassot
+    - fpvandoorn
+    - ocfnash
+  report-build-failures: false
+
+flypitch:
+  description: |
+    The Flypitch project gives a formal proof of the independence of the continuum hypothesis from ZFC.
+    The continuum hypothesis states that there is no cardinality between the smallest infinite cardinal and the cardinality of the continuum.
+    This project also develops a library of first-order logic, set theory and forcing.
+  organization: 'flypitch'
+  maintainers:
+    - jesse-michael-han
+    - fpvandoorn
+  report-build-failures: false
+  
+grammars:
+  description: |
+    The aim of the project is to formalize the Chomsky hierarchy.
+    So far, the main focus has been to prove closure properties of general (type 0) grammars.
+    We also have some results about context-free (type 2) grammars.
+  organization: 'madvorak'
+  maintainers:
+    - madvorak
+  report-build-failures: true
+
+lean-matrix-cookbook:
+  description: |
+    This project aims to provide the lemmas in [The Matrix Cookbook](https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf) as proofs in the Lean theorem prover.
+    Ideally, every proof in this repository should be a reference to a single lemma in Mathlib; this can be used as an index against (and progress report for) mathlib for standard matrix results.
+  organization: 'eric-wieser'
+  maintainers:
+    - eric-wieser
+  report-build-failures: false
+
